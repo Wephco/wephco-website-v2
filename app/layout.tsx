@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
-// import Script from 'next/script';
+import Script from 'next/script';
 import './globals.css';
 
 const outfit = Outfit({
@@ -22,24 +22,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      {/* <head>
+      <head>
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-S4KJ9R4BVF"
-          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=AW-18517341176"
+          strategy="beforeInteractive"
         />
-        <Script id="google-tag" strategy="afterInteractive">
+        <Script id="google-ads-gtag" strategy="beforeInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-S4KJ9R4BVF');
+            gtag('config', 'AW-18517341176');
           `}
         </Script>
-        <Script
-          src="https://t.contentsquare.net/uxa/65358b2c8c4e3.js"
-          strategy="afterInteractive"
-        />
-      </head> */}
+      </head>
       <body className={`${outfit.variable} antialiased`}>{children}</body>
     </html>
   );

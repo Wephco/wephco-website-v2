@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 import { createMagazineSubscription } from '@/actions/magazine';
 import { WEPHCO_MEMBERSHIP_TIERS, IMembershipTier } from '@/lib/constants';
 import { FlutterwaveButton } from '@/components/flutterwave/FlutterwaveButton';
+import Image from 'next/image';
+import wimaoPreview from '@/images/wimao-october-2026.jpeg';
 
 
 // Exclude free tier ('insight') from magazine membership checkout
@@ -83,22 +85,31 @@ export default function MagazineSubscriptionPage() {
   return (
     <div className="relative min-h-screen bg-background-dark text-slate-100 font-sans">
       {/* Hero Header */}
-      <section className="relative">
-        <div
-          className="w-full h-90 md:h-112.5 bg-cover bg-center flex items-center justify-center p-6 text-center"
-          style={{
-            backgroundImage: `linear-gradient(rgba(32, 29, 18, 0.4), rgba(32, 29, 18, 0.8)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80')`,
-          }}>
-          <div className="max-w-4xl">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6">
-              Wimoa Magazine
-            </h1>
-            <p className="text-slate-300 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed font-light">
-              Subscribe to the premier publication covering global luxury real estate, design masterpieces, wealth preservation, and institutional partnerships across Africa.
-            </p>
-          </div>
+
+      <section className="relative min-h-[65vh] flex items-center justify-center overflow-hidden border-b border-primary/10">
+        <div className="absolute inset-0 bg-linear-to-b from-black/20 via-background-dark/60 to-background-dark z-10" />
+        <div className="absolute inset-0 bg-cover bg-center scale-105">
+          {/* <Image
+            src={wimaoPreview}
+            alt="WEPHCO Global Architecture Cover"
+            fill
+            style={{ objectFit: 'cover' }}
+            priority
+          /> */}
+        </div>
+
+        <div className="relative z-20 max-w-5xl px-6 text-center space-y-6 pt-12">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-light text-white leading-tight tracking-tight">
+            Wimoa Magazine
+          </h1>
+
+          <p className="text-slate-200 text-base md:text-xl max-w-3xl mx-auto font-light leading-relaxed">
+            Subscribe to the premier publication covering global luxury real estate, design masterpieces, wealth preservation, and institutional partnerships across Africa.
+          </p>
         </div>
       </section>
+
+      
 
       {/* Main Content */}
       <section className="max-w-6xl mx-auto px-4 md:px-8 py-16 relative z-10">
