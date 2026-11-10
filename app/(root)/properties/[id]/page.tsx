@@ -19,6 +19,9 @@ export default function PropertyDetailsPage() {
   const [property, setProperty] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState<string>('');
+  const [selectedUnitIndex, setSelectedUnitIndex] = useState<number | null>(
+    null
+  );
 
   // Form states
   const [name, setName] = useState('');
@@ -39,6 +42,70 @@ export default function PropertyDetailsPage() {
 
         if (docSnap.exists()) {
           const data = docSnap.data();
+
+          // Normalize project units (multiple bedrooms, bathrooms, square_foot sets)
+          let normalizedUnits: {
+            bedroom: string;
+            bathroom: string;
+            square_foot: string;
+          }[] = [];
+
+          if (Array.isArray(data.units) && data.units.length > 0) {
+            normalizedUnits = data.units.map((u: any) => ({
+              bedroom: String(u.bedroom ?? ''),
+              bathroom: String(u.bathroom ?? ''),
+              square_foot: String(u.square_foot ?? ''),
+            }));
+          } else {
+            const rawBeds = String(
+              data.bedroom ?? data.beds ?? data.bedrooms ?? '4'
+            )
+              .split(',')
+              .map((s) => s.trim())
+              .filter(Boolean);
+            const rawBaths = String(
+              data.bathroom ?? data.baths ?? data.bathrooms ?? '5'
+            )
+              .split(',')
+              .map((s) => s.trim())
+              .filter(Boolean);
+            const rawSqft = String(data.square_foot ?? data.sqft ?? '4500')
+              .split(',')
+              .map((s) => s.trim())
+              .filter(Boolean);
+            const maxLen = Math.max(
+              rawBeds.length,
+              rawBaths.length,
+              rawSqft.length,
+              1
+            );
+
+            normalizedUnits = Array.from({ length: maxLen }, (_, idx) => ({
+              bedroom: rawBeds[idx] || rawBeds[0] || '',
+              bathroom: rawBaths[idx] || rawBaths[0] || '',
+              square_foot: rawSqft[idx] || rawSqft[0] || '',
+            }));
+          }
+
+          const bedsSummary = Array.from(
+            new Set(normalizedUnits.map((u) => u.bedroom).filter(Boolean))
+          ).join(', ');
+          const bathsSummary = Array.from(
+            new Set(normalizedUnits.map((u) => u.bathroom).filter(Boolean))
+          ).join(', ');
+          const sqftSummary = Array.from(
+            new Set(
+              normalizedUnits
+                .map((u) => {
+                  const num = Number(String(u.square_foot).replace(/,/g, ''));
+                  return !isNaN(num) && num > 0
+                    ? num.toLocaleString()
+                    : u.square_foot;
+                })
+                .filter(Boolean)
+            )
+          ).join(', ');
+
           const mappedData = {
             id: docSnap.id,
             title: data.title,
@@ -58,9 +125,10 @@ export default function PropertyDetailsPage() {
             verified: data.verified || false,
             developer: data.developer || 'Wephco',
             agent: data.agent || null,
-            beds: data.beds || data.bedroom || data.bedrooms || 4,
-            baths: data.baths || data.bathroom || data.bathrooms || 5,
-            sqft: data.sqft || data.square_foot || 4500,
+            units: normalizedUnits,
+            beds: bedsSummary || 'N/A',
+            baths: bathsSummary || 'N/A',
+            sqft: sqftSummary || 'N/A',
             garage: data.garage || '3 Cars',
             amenities: data.amenities || [
               'Infinity Pool',
@@ -257,31 +325,144 @@ export default function PropertyDetailsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
           {/* Left Column: Details */}
           <div className="lg:col-span-2 space-y-12">
-            {/* Key Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 p-8 bg-[#022618]/25 border border-primary/10 rounded-xl">
-              <div className="flex flex-col items-center text-center">
-                <BiBed className="text-primary mb-2 text-3xl" />
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">
-                  Bedrooms
-                </p>
-                <p className="text-xl font-bold">{property.beds.toString()}</p>
+            {/* Key Stats Summary */}
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6 p-8 bg-[#022618]/25 border border-primary/10 rounded-xl">
+                <div className="flex flex-col items-center text-center">
+                  <BiBed className="text-primary mb-2 text-3xl" />
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">
+                    Bedrooms
+                  </p>
+                  <p className="text-xl font-bold">
+                    {selectedUnitIndex !== null &&
+                    property.units?.[selectedUnitIndex]
+                      ? property.units[selectedUnitIndex].bedroom
+                      : property.beds.toString()}
+                  </p>
+                </div>
+                <div className="flex flex-col items-center text-center border-l border-primary/10">
+                  <BiBath className="text-primary mb-2 text-3xl" />
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">
+                    Bathrooms
+                  </p>
+                  <p className="text-xl font-bold">
+                    {selectedUnitIndex !== null &&
+                    property.units?.[selectedUnitIndex]
+                      ? property.units[selectedUnitIndex].bathroom
+                      : property.baths.toString()}
+                  </p>
+                </div>
+                <div className="flex flex-col items-center text-center col-span-2 md:col-span-1 border-t md:border-t-0 md:border-l border-primary/10 pt-4 md:pt-0">
+                  <BiArea className="text-primary mb-2 text-3xl" />
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">
+                    Square Ft
+                  </p>
+                  <p className="text-xl font-bold">
+                    {selectedUnitIndex !== null &&
+                    property.units?.[selectedUnitIndex]
+                      ? (() => {
+                          const raw =
+                            property.units[selectedUnitIndex].square_foot;
+                          const num = Number(String(raw).replace(/,/g, ''));
+                          return !isNaN(num) && num > 0
+                            ? num.toLocaleString()
+                            : raw;
+                        })()
+                      : property.sqft.toString()}
+                  </p>
+                </div>
               </div>
-              <div className="flex flex-col items-center text-center border-l border-primary/10">
-                <BiBath className="text-primary mb-2 text-3xl" />
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">
-                  Bathrooms
-                </p>
-                <p className="text-xl font-bold">{property.baths.toString()}</p>
-              </div>
-              <div className="flex flex-col items-center text-center border-l border-primary/10">
-                <BiArea className="text-primary mb-2 text-3xl" />
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">
-                  Square Ft
-                </p>
-                <p className="text-xl font-bold">
-                  {Number(property.sqft).toLocaleString()}
-                </p>
-              </div>
+
+              {/* Project Unit Configurations Breakdown */}
+              {property.units && property.units.length > 0 && (
+                <div className="bg-[#022618]/15 border border-primary/15 rounded-xl p-6 space-y-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <h4 className="text-sm font-bold uppercase tracking-widest text-primary">
+                        Available Unit Configurations
+                      </h4>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        Select a unit type below to view its specifications
+                      </p>
+                    </div>
+                    {selectedUnitIndex !== null && (
+                      <button
+                        type="button"
+                        onClick={() => setSelectedUnitIndex(null)}
+                        className="text-xs text-primary hover:underline font-semibold uppercase tracking-wider cursor-pointer"
+                      >
+                        Show All Units
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                    {property.units.map((unit: any, idx: number) => {
+                      const isSelected = selectedUnitIndex === idx;
+                      const sqftNum = Number(
+                        String(unit.square_foot).replace(/,/g, '')
+                      );
+                      const formattedSqft =
+                        !isNaN(sqftNum) && sqftNum > 0
+                          ? sqftNum.toLocaleString()
+                          : unit.square_foot;
+
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() =>
+                            setSelectedUnitIndex(isSelected ? null : idx)
+                          }
+                          className={`text-left p-4 rounded-xl border transition-all cursor-pointer ${
+                            isSelected
+                              ? 'bg-primary text-background-dark border-primary shadow-lg shadow-primary/20'
+                              : 'bg-white/5 hover:bg-white/10 text-slate-100 border-primary/15 hover:border-primary/40'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <span
+                              className={`text-xs font-extrabold uppercase tracking-wider ${
+                                isSelected
+                                  ? 'text-background-dark'
+                                  : 'text-primary'
+                              }`}
+                            >
+                              {unit.bedroom}{' '}
+                              {Number(unit.bedroom) === 1
+                                ? 'Bedroom'
+                                : 'Bedrooms'}
+                            </span>
+                            <span
+                              className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
+                                isSelected
+                                  ? 'bg-background-dark/20 text-background-dark font-bold'
+                                  : 'bg-primary/10 text-primary'
+                              }`}
+                            >
+                              Unit {idx + 1}
+                            </span>
+                          </div>
+                          <div
+                            className={`flex items-center justify-between text-xs ${
+                              isSelected
+                                ? 'text-background-dark/80 font-semibold'
+                                : 'text-slate-300'
+                            }`}
+                          >
+                            <span>
+                              {unit.bathroom}{' '}
+                              {Number(unit.bathroom) === 1 ? 'Bath' : 'Baths'}
+                            </span>
+                            <span>•</span>
+                            <span>{formattedSqft} Sq Ft</span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Description Section */}

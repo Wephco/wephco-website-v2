@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createProperty, updateProperty } from '@/actions/property-management';
-import { IProperty } from '@/interfaces/propertyInterface';
+import { IProperty, IPropertyUnit } from '@/interfaces/propertyInterface';
 import { toast } from 'sonner';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ArrowLeft, Upload, ImageIcon, FileText } from 'lucide-react';
+import {
+  ArrowLeft,
+  Upload,
+  ImageIcon,
+  FileText,
+  Plus,
+  Trash2,
+} from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { uploadFile } from '@/lib/helperFunctions';
@@ -119,6 +126,40 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
   });
   const [isLoadingCountries, setIsLoadingCountries] = useState(false);
 
+  const [units, setUnits] = useState<IPropertyUnit[]>(() => {
+    if (property?.units && Array.isArray(property.units) && property.units.length > 0) {
+      return property.units.map((u) => ({
+        bedroom: u.bedroom?.toString() || '',
+        bathroom: u.bathroom?.toString() || '',
+        square_foot: u.square_foot?.toString() || '',
+      }));
+    }
+
+    if (property?.bedroom || property?.bathroom || property?.square_foot) {
+      const beds = String(property.bedroom ?? '')
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const baths = String(property.bathroom ?? '')
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const sqfts = String(property.square_foot ?? '')
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const maxLen = Math.max(beds.length, baths.length, sqfts.length, 1);
+
+      return Array.from({ length: maxLen }, (_, idx) => ({
+        bedroom: beds[idx] || beds[0] || '1',
+        bathroom: baths[idx] || baths[0] || '1',
+        square_foot: sqfts[idx] || sqfts[0] || '',
+      }));
+    }
+
+    return [{ bedroom: '1', bathroom: '1', square_foot: '' }];
+  });
+
   const [formState, setFormState] = useState({
     title: property?.title || '',
     developer: property?.developer || '',
@@ -130,15 +171,36 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
     status: property?.status || 'Available',
     tag: property?.tag || 'local',
     category: property?.category || 'Sale',
-    bedroom: property?.bedroom?.toString() || '0',
-    bathroom: property?.bathroom?.toString() || '0',
-    square_foot: property?.square_foot?.toString() || '0',
     verified: property?.verified ?? false,
     interests: property?.interests?.join(', ') || '',
   });
 
   const handleChange = (field: string, value: any) => {
     setFormState((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleUnitChange = (
+    index: number,
+    field: keyof IPropertyUnit,
+    value: string
+  ) => {
+    setUnits((prev) =>
+      prev.map((unit, idx) =>
+        idx === index ? { ...unit, [field]: value } : unit
+      )
+    );
+  };
+
+  const addUnit = () => {
+    setUnits((prev) => [
+      ...prev,
+      { bedroom: '', bathroom: '', square_foot: '' },
+    ]);
+  };
+
+  const removeUnit = (index: number) => {
+    if (units.length <= 1) return;
+    setUnits((prev) => prev.filter((_, idx) => idx !== index));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -192,21 +254,31 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
       return;
     }
 
-    const numberOfBedrooms = Number(formState.bedroom);
-    const numberOfBathrooms = Number(formState.bathroom);
-    const squareFoot = Number(formState.square_foot);
+    const validUnits = units
+      .map((u) => ({
+        bedroom: String(u.bedroom).trim(),
+        bathroom: String(u.bathroom).trim(),
+        square_foot: String(u.square_foot).trim(),
+      }))
+      .filter((u) => u.bedroom || u.bathroom || u.square_foot);
 
-    if (
-      isNaN(numberOfBedrooms) ||
-      isNaN(numberOfBathrooms) ||
-      isNaN(squareFoot)
-    ) {
+    if (validUnits.length === 0) {
       toast.warning(
-        'Please enter valid numbers for bedrooms, bathrooms, and square footage'
+        'Please add at least one unit configuration (bedrooms, bathrooms, and square footage)'
       );
       setIsSubmitting(false);
       return;
     }
+
+    const bedroomSummary = Array.from(
+      new Set(validUnits.map((u) => u.bedroom).filter(Boolean))
+    ).join(', ');
+    const bathroomSummary = Array.from(
+      new Set(validUnits.map((u) => u.bathroom).filter(Boolean))
+    ).join(', ');
+    const sqftSummary = Array.from(
+      new Set(validUnits.map((u) => u.square_foot).filter(Boolean))
+    ).join(', ');
 
     const imageUrls = await Promise.all(
       selectedFiles.map((file) => uploadFile(file.file, 'properties'))
@@ -229,9 +301,10 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
       formData.append('status', formState.status);
       formData.append('tag', formState.tag);
       formData.append('category', formState.category);
-      formData.append('bedroom', numberOfBedrooms.toString());
-      formData.append('bathroom', numberOfBathrooms.toString());
-      formData.append('square_foot', squareFoot.toString());
+      formData.append('bedroom', bedroomSummary);
+      formData.append('bathroom', bathroomSummary);
+      formData.append('square_foot', sqftSummary);
+      formData.append('units', JSON.stringify(validUnits));
       formData.append('verified', formState.verified ? 'true' : 'false');
 
       const interestsArray = formState.interests
@@ -402,52 +475,100 @@ export default function PropertyForm({ property, mode }: PropertyFormProps) {
                   rows={4}
                 />
               </div>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="grid gap-2">
-                  <Label
-                    htmlFor="bedroom"
-                    className="text-slate-700 font-semibold">
-                    Bedrooms
-                  </Label>
-                  <Input
-                    id="bedroom"
-                    type="number"
-                    value={formState.bedroom}
-                    onChange={(e) => handleChange('bedroom', e.target.value)}
-                    className="text-slate-800"
-                    placeholder="0"
-                  />
+              <div className="space-y-3 pt-2 border-t border-slate-100">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label className="text-slate-700 font-semibold">
+                      Project Unit Configurations *
+                    </Label>
+                    <p className="text-xs text-slate-500">
+                      Add each unit type available in this project (e.g. 1 Bed,
+                      2 Beds, 3 Beds with their respective bathrooms & sq ft).
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addUnit}
+                    className="gap-1.5 border-[#cfb53b]/40 text-[#b89e2f] hover:bg-[#fef9e8]"
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                    Add Unit Type
+                  </Button>
                 </div>
-                <div className="grid gap-2">
-                  <Label
-                    htmlFor="bathroom"
-                    className="text-slate-700 font-semibold">
-                    Bathrooms
-                  </Label>
-                  <Input
-                    id="bathroom"
-                    type="number"
-                    value={formState.bathroom}
-                    onChange={(e) => handleChange('bathroom', e.target.value)}
-                    className="text-slate-800"
-                    placeholder="0"
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label
-                    htmlFor="square_foot"
-                    className="text-slate-700 font-semibold">
-                    Sq Ft
-                  </Label>
-                  <Input
-                    id="square_foot"
-                    value={formState.square_foot}
-                    onChange={(e) =>
-                      handleChange('square_foot', e.target.value)
-                    }
-                    className="text-slate-800"
-                    placeholder="e.g. 1500"
-                  />
+
+                <div className="space-y-3">
+                  {units.map((unit, idx) => (
+                    <div
+                      key={idx}
+                      className="grid grid-cols-12 gap-3 items-end bg-slate-50/80 border border-slate-200/80 rounded-lg p-3"
+                    >
+                      <div className="col-span-4 sm:col-span-3 grid gap-1.5">
+                        <Label className="text-xs text-slate-600 font-medium">
+                          Bedrooms
+                        </Label>
+                        <Input
+                          type="number"
+                          min="0"
+                          value={unit.bedroom}
+                          onChange={(e) =>
+                            handleUnitChange(idx, 'bedroom', e.target.value)
+                          }
+                          className="text-slate-800 bg-white h-9"
+                          placeholder="e.g. 1"
+                          required
+                        />
+                      </div>
+
+                      <div className="col-span-4 sm:col-span-4 grid gap-1.5">
+                        <Label className="text-xs text-slate-600 font-medium">
+                          Bathrooms
+                        </Label>
+                        <Input
+                          type="number"
+                          min="0"
+                          step="0.5"
+                          value={unit.bathroom}
+                          onChange={(e) =>
+                            handleUnitChange(idx, 'bathroom', e.target.value)
+                          }
+                          className="text-slate-800 bg-white h-9"
+                          placeholder="e.g. 1.5"
+                          required
+                        />
+                      </div>
+
+                      <div className="col-span-3 sm:col-span-4 grid gap-1.5">
+                        <Label className="text-xs text-slate-600 font-medium">
+                          Sq Ft
+                        </Label>
+                        <Input
+                          type="text"
+                          value={unit.square_foot}
+                          onChange={(e) =>
+                            handleUnitChange(idx, 'square_foot', e.target.value)
+                          }
+                          className="text-slate-800 bg-white h-9"
+                          placeholder="e.g. 1200"
+                          required
+                        />
+                      </div>
+
+                      <div className="col-span-1 flex justify-end">
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          disabled={units.length <= 1}
+                          onClick={() => removeUnit(idx)}
+                          className="h-9 w-9 text-slate-400 hover:text-rose-600 hover:bg-rose-50 disabled:opacity-30"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </CardContent>

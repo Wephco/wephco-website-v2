@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 import { wephcoServices } from '@/lib/constants';
-import { ArrowRight, Pause, Play } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 // Service Images (Full & Small)
 import InternationalFull from '@/images/services/international_property_brokerage/InternationalPropertyBrokerageFull.jpg';
@@ -169,11 +169,11 @@ function ServiceImageQueue({
   return (
     <div className="absolute bottom-4 left-4 right-4 sm:right-auto sm:bottom-6 sm:left-6 lg:bottom-10 lg:left-10 z-30 flex flex-col pointer-events-auto">
       {/* Vertical queue container */}
-      <div className="relative h-[188px] sm:h-[228px] lg:h-114 overflow-hidden">
+      <div className="relative h-47 sm:h-57 lg:h-114 overflow-hidden">
         <div
           className={`flex flex-col gap-3 ${
             isTransitioning
-              ? 'transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] -translate-y-[100px] sm:-translate-y-[120px] lg:-translate-y-39'
+              ? 'transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] -translate-y-25 sm:-translate-y-30 lg:-translate-y-39'
               : ''
           }`}
         >
@@ -310,13 +310,13 @@ function ServiceMainCarousel({
               <span>Book Consultation</span>
               <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </Link>
-            <Link
+            {/* <Link
               href={`/services/${displayedSlide.title.toLowerCase().replace(/\s+/g, '-')}`}
               className="inline-flex items-center gap-2 border border-white/25 hover:border-primary text-white px-4 py-2.5 sm:px-7 sm:py-3.5 rounded-xl font-bold text-[11px] sm:text-xs uppercase tracking-wider hover:bg-white/5 transition-all"
             >
               <span>View Details</span>
               <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>

@@ -4,6 +4,12 @@ export interface IPropertyAgent {
   phone: string;
 }
 
+export interface IPropertyUnit {
+  bedroom: string | number;
+  bathroom: string | number;
+  square_foot: string | number;
+}
+
 export interface IProperty {
   id?: string;
   title: string;
@@ -18,9 +24,10 @@ export interface IProperty {
   tag: 'Local' | 'International';
   pdfUrl: string | null;
   category: 'Rent' | 'Lease' | 'Sale';
-  bedroom: string | number;
-  bathroom: string | number;
-  square_foot: string | number;
+  bedroom: string | number | (string | number)[];
+  bathroom: string | number | (string | number)[];
+  square_foot: string | number | (string | number)[];
+  units?: IPropertyUnit[];
   verified: boolean;
   featured?: boolean | null;
   agent?: IPropertyAgent | null;

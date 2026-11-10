@@ -38,7 +38,6 @@ import { createContactRequest } from '@/actions/contact';
 export default function PropertyManagementPage() {
   const [activeTab, setActiveTab] = useState<'owners' | 'tenants' | 'security'>('owners');
   const [demoModalOpen, setDemoModalOpen] = useState(false);
-  const [activeDashboardTab, setActiveDashboardTab] = useState<'overview' | 'maintenance' | 'yield'>('overview');
 
   // Form State for Demo / Service Inquiry Request
   const [demoForm, setDemoForm] = useState({
@@ -132,241 +131,56 @@ export default function PropertyManagementPage() {
           </div>
 
           {/* ------------------------------------------------------------------- */}
-          {/* INTERACTIVE DASHBOARD SOFTWARE PREVIEW MOCKUP */}
+          {/* STATISTICS CARDS */}
           {/* ------------------------------------------------------------------- */}
           <div className="mt-16 relative max-w-5xl mx-auto">
-            <div className="bg-slate-950/90 rounded-2xl border border-primary/30 shadow-2xl overflow-hidden backdrop-blur-xl">
-              <div className="bg-slate-900/90 px-6 py-4 border-b border-primary/20 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
-                  <span className="ml-3 text-xs text-slate-400 font-mono hidden sm:inline">
-                    portal.wephco.com/asset-management/operating-system
-                  </span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* 1. Total Property Managed */}
+              <div className="bg-slate-950/85 hover:bg-slate-900/90 p-8 rounded-2xl border border-primary/25 hover:border-primary/50 shadow-2xl backdrop-blur-xl transition-all duration-300 flex flex-col items-center text-center group">
+                <div className="size-14 rounded-2xl bg-primary/15 border border-primary/30 text-primary flex items-center justify-center mb-5 group-hover:bg-primary group-hover:text-background-dark transition-all duration-300">
+                  <Building2 className="w-7 h-7" />
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-[11px] text-emerald-400 font-semibold bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    Live Fiduciary Sync
-                  </span>
-                  <span className="text-[11px] text-slate-400 border border-slate-700 px-2 py-0.5 rounded">
-                    NIESV Benchmarked 🔒
-                  </span>
-                </div>
+                <p className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
+                  100<span className="text-primary">+</span>
+                </p>
+                <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-2">
+                  Total Property Managed
+                </h3>
+                <p className="text-xs text-slate-400 font-light leading-relaxed">
+                  High-value residential estates, serviced apartments, and commercial portfolios under active governance.
+                </p>
               </div>
 
-              <div className="bg-slate-900/40 px-6 py-3 border-b border-primary/10 flex items-center justify-between flex-wrap gap-3">
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setActiveDashboardTab('overview')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${activeDashboardTab === 'overview'
-                        ? 'bg-primary text-background-dark shadow'
-                        : 'text-slate-400 hover:text-white'
-                      }`}
-                  >
-                    <LayoutDashboard className="w-3.5 h-3.5" />
-                    <span>Real-Time Dashboard</span>
-                  </button>
-                  <button
-                    onClick={() => setActiveDashboardTab('maintenance')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${activeDashboardTab === 'maintenance'
-                        ? 'bg-primary text-background-dark shadow'
-                        : 'text-slate-400 hover:text-white'
-                      }`}
-                  >
-                    <Wrench className="w-3.5 h-3.5" />
-                    <span>Preventive Maintenance</span>
-                  </button>
-                  <button
-                    onClick={() => setActiveDashboardTab('yield')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${activeDashboardTab === 'yield'
-                        ? 'bg-primary text-background-dark shadow'
-                        : 'text-slate-400 hover:text-white'
-                      }`}
-                  >
-                    <TrendingUp className="w-3.5 h-3.5" />
-                    <span>Yield &amp; Screening Rubric</span>
-                  </button>
+              {/* 2. Years of Excellence */}
+              <div className="bg-slate-950/85 hover:bg-slate-900/90 p-8 rounded-2xl border border-primary/25 hover:border-primary/50 shadow-2xl backdrop-blur-xl transition-all duration-300 flex flex-col items-center text-center group">
+                <div className="size-14 rounded-2xl bg-primary/15 border border-primary/30 text-primary flex items-center justify-center mb-5 group-hover:bg-primary group-hover:text-background-dark transition-all duration-300">
+                  <ShieldCheck className="w-7 h-7" />
                 </div>
+                <p className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
+                  7<span className="text-primary">+</span>
+                </p>
+                <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-2">
+                  Years of Excellence
+                </h3>
+                <p className="text-xs text-slate-400 font-light leading-relaxed">
+                  Proven track record in institutional fiduciary management, asset preservation, and yield optimization.
+                </p>
               </div>
 
-              <div className="p-6 md:p-8 space-y-6">
-                {activeDashboardTab === 'overview' && (
-                  <div className="space-y-6 animate-fadeIn">
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                      <div className="bg-slate-900/80 p-4 rounded-xl border border-primary/20 space-y-1">
-                        <p className="text-[11px] text-slate-400 uppercase font-semibold">Occupancy Rate</p>
-                        <p className="text-2xl font-black text-white">98.4%</p>
-                        <span className="text-[10px] text-emerald-400 font-bold">95%+ SOP Target</span>
-                      </div>
-                      <div className="bg-slate-900/80 p-4 rounded-xl border border-primary/20 space-y-1">
-                        <p className="text-[11px] text-slate-400 uppercase font-semibold">Rent Collection</p>
-                        <p className="text-2xl font-black text-primary">100% On-Time</p>
-                        <span className="text-[10px] text-emerald-400 font-bold">Rent Control SOP</span>
-                      </div>
-                      <div className="bg-slate-900/80 p-4 rounded-xl border border-primary/20 space-y-1">
-                        <p className="text-[11px] text-slate-400 uppercase font-semibold">Arrears Rate</p>
-                        <p className="text-2xl font-black text-emerald-400">0.00%</p>
-                        <span className="text-[10px] text-slate-400">0 Days Overdue</span>
-                      </div>
-                      <div className="bg-slate-900/80 p-4 rounded-xl border border-primary/20 space-y-1">
-                        <p className="text-[11px] text-slate-400 uppercase font-semibold">Net Annual Yield</p>
-                        <p className="text-2xl font-black text-white">12.5%</p>
-                        <span className="text-[10px] text-primary font-bold">Yield Bonus Tier</span>
-                      </div>
-                      <div className="bg-slate-900/80 p-4 rounded-xl border border-primary/20 col-span-2 md:col-span-1 space-y-1">
-                        <p className="text-[11px] text-slate-400 uppercase font-semibold">Tenant Profile</p>
-                        <p className="text-2xl font-black text-primary">Grade A</p>
-                        <span className="text-[10px] text-slate-400">Underwriting Vetted</span>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="md:col-span-2 bg-slate-900/60 p-5 rounded-xl border border-primary/10 space-y-4">
-                        <div className="flex justify-between items-center">
-                          <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                            <Receipt className="w-4 h-4 text-primary" />
-                            Live Rent Collection Schedule (7-Stage Operating Cycle)
-                          </h4>
-                          <span className="text-[11px] text-primary underline cursor-pointer">
-                            Download Sample Owner Report (.PDF)
-                          </span>
-                        </div>
-                        <div className="space-y-3">
-                          {[
-                            { property: 'Luxury Villa, Maitama Abuja', tenant: 'Grade A Tenant • Corporate Covenant', amount: '₦18,500,000 / yr', status: 'Remitted (Signature Tier)', date: '30 Days Advance Trigger' },
-                            { property: 'Commercial Plaza, Kano Central', tenant: 'Grade A Tenant • Tier-1 Commercial', amount: '₦32,000,000 / yr', status: 'Remitted (Elite Tier)', date: 'On-Schedule Settlement' },
-                            { property: 'Executive Short-Let Unit, Wuse II', tenant: 'Guest Vetted • 18% Booking Rev', amount: '₦180,000 / night', status: 'Settled (Serviced Tier)', date: 'Dynamic Rate Active' },
-                          ].map((item, i) => (
-                            <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-slate-950/60 border border-slate-800 text-xs">
-                              <div>
-                                <p className="font-bold text-white">{item.property}</p>
-                                <p className="text-[11px] text-slate-400">{item.tenant}</p>
-                              </div>
-                              <div className="text-right">
-                                <p className="font-bold text-primary">{item.amount}</p>
-                                <span className="text-[10px] text-emerald-400 font-semibold">{item.status}</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="bg-slate-900/60 p-5 rounded-xl border border-primary/10 space-y-4 flex flex-col justify-between">
-                        <div>
-                          <div className="flex items-center justify-between mb-3">
-                            <span className="text-xs font-bold text-amber-400 flex items-center gap-1.5">
-                              <BellRing className="w-4 h-4 animate-bounce" />
-                              Push Approval Alert
-                            </span>
-                            <span className="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full">
-                              Threshold Exceeded
-                            </span>
-                          </div>
-                          <p className="text-xs font-bold text-white">Generator Load &amp; ATS Controller Service</p>
-                          <p className="text-[11px] text-slate-300 mt-1 leading-relaxed">
-                            Pre-agreed spend threshold: ₦150,000. Request amount: ₦220,000 (Maitama Villa). Photo audit attached.
-                          </p>
-                        </div>
-                        <div className="pt-3 border-t border-slate-800 flex gap-2">
-                          <button className="flex-1 bg-primary text-background-dark text-xs font-bold py-2 rounded-lg hover:bg-primary/90 transition-all cursor-pointer">
-                            Approve Spend
-                          </button>
-                          <button className="px-3 bg-slate-800 text-slate-300 text-xs font-semibold py-2 rounded-lg hover:bg-slate-700 transition-all cursor-pointer">
-                            Decline
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {activeDashboardTab === 'maintenance' && (
-                  <div className="space-y-6 animate-fadeIn">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="bg-slate-900/60 p-5 rounded-xl border border-primary/10 space-y-4">
-                        <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-primary" />
-                          Preventive Maintenance System (PMS)
-                        </h4>
-                        <div className="space-y-3 text-xs">
-                          <div className="p-3 bg-slate-950 rounded-lg border-l-4 border-emerald-500 flex justify-between items-center">
-                            <div>
-                              <p className="font-bold text-white">Electrical, Plumbing &amp; Earthing Test</p>
-                              <p className="text-[11px] text-slate-400">Quarterly Protocol • Maitama Villa</p>
-                            </div>
-                            <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950/80 px-2 py-1 rounded">
-                              Completed
-                            </span>
-                          </div>
-                          <div className="p-3 bg-slate-950 rounded-lg border-l-4 border-amber-500 flex justify-between items-center">
-                            <div>
-                              <p className="font-bold text-white">Pre-Rainy Season Drainage &amp; Flashing Check</p>
-                              <p className="text-[11px] text-slate-400">HVAC &amp; Roofing • Kano Commercial Plaza</p>
-                            </div>
-                            <span className="text-[10px] text-amber-400 font-bold bg-amber-950/80 px-2 py-1 rounded">
-                              Scheduled
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="bg-slate-900/60 p-5 rounded-xl border border-primary/10 space-y-4">
-                        <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                          <PieChart className="w-4 h-4 text-primary" />
-                          Service Charge Allocation Governance
-                        </h4>
-                        <div className="space-y-2 text-xs">
-                          <div className="flex justify-between items-center font-semibold">
-                            <span className="text-slate-300">Security Operations (25%) &amp; Energy (20%)</span>
-                            <span className="text-primary font-bold">45% Shared</span>
-                          </div>
-                          <div className="w-full bg-slate-950 h-3 rounded-full overflow-hidden border border-slate-800">
-                            <div className="bg-primary h-full rounded-full w-[45%]" />
-                          </div>
-                          <p className="text-[11px] text-slate-400 leading-relaxed pt-1">
-                            Audited line-by-line transparent allocation published to owners on the 5th business day of each month.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {activeDashboardTab === 'yield' && (
-                  <div className="space-y-6 animate-fadeIn">
-                    <div className="bg-slate-900/60 p-5 rounded-xl border border-primary/10 space-y-4">
-                      <div className="flex justify-between items-center">
-                        <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                          <TrendingUp className="w-4 h-4 text-primary" />
-                          Institutional Tenant Underwriting &amp; Yield Optimiser
-                        </h4>
-                        <span className="text-[11px] text-emerald-400 font-bold bg-emerald-950 px-2.5 py-1 rounded-full border border-emerald-500/30">
-                          WEPHCO Tenant Rubric Vetted
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs pt-2">
-                        <div className="bg-emerald-950/40 p-3 rounded-lg border border-emerald-500/30">
-                          <span className="font-extrabold text-emerald-400 block">GRADE A — Premium</span>
-                          <p className="text-[11px] text-slate-300 mt-1">Tier-1 Corporate / Institutional. Fast-track approval.</p>
-                        </div>
-                        <div className="bg-blue-950/40 p-3 rounded-lg border border-blue-500/30">
-                          <span className="font-extrabold text-blue-400 block">GRADE B — Acceptable</span>
-                          <p className="text-[11px] text-slate-300 mt-1">Debt-to-income ≤ 35%. Standard security deposit.</p>
-                        </div>
-                        <div className="bg-amber-950/40 p-3 rounded-lg border border-amber-500/30">
-                          <span className="font-extrabold text-amber-400 block">GRADE C — Monitoring</span>
-                          <p className="text-[11px] text-slate-300 mt-1">Volatile earnings. Requires corporate co-sign / prepayments.</p>
-                        </div>
-                        <div className="bg-red-950/40 p-3 rounded-lg border border-red-500/30">
-                          <span className="font-extrabold text-red-400 block">GRADE D — Reject</span>
-                          <p className="text-[11px] text-slate-300 mt-1">Unverifiable identity or adverse history. Decline.</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
+              {/* 3. Rent Collection */}
+              <div className="bg-slate-950/85 hover:bg-slate-900/90 p-8 rounded-2xl border border-primary/25 hover:border-primary/50 shadow-2xl backdrop-blur-xl transition-all duration-300 flex flex-col items-center text-center group">
+                <div className="size-14 rounded-2xl bg-primary/15 border border-primary/30 text-primary flex items-center justify-center mb-5 group-hover:bg-primary group-hover:text-background-dark transition-all duration-300">
+                  <Receipt className="w-7 h-7" />
+                </div>
+                <p className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
+                  98<span className="text-primary">%</span>
+                </p>
+                <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-2">
+                  Rent Collection
+                </h3>
+                <p className="text-xs text-slate-400 font-light leading-relaxed">
+                  Consistent on-time rental remittance backed by our proprietary tenant underwriting and Rent Control SOP.
+                </p>
               </div>
             </div>
           </div>

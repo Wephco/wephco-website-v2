@@ -14,8 +14,10 @@ export default function PropertyListingsPage() {
   >([]);
   const [loading, setLoading] = useState(true);
 
-  // Filter states (price only)
+  // Filter states
   const [priceRange, setPriceRange] = useState<number>(50000000); // Max price default to 50M
+  const [selectedBedroomFilter, setSelectedBedroomFilter] =
+    useState<string>('Any');
   const [sortBy, setSortBy] = useState('Newest Listings');
   const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -48,10 +50,12 @@ export default function PropertyListingsPage() {
             verified: data.verified || false,
             developer: data.developer || '',
             interests: data.interests || [],
-            beds: data.beds || data.bedrooms || 0,
-            baths: data.baths || data.bathrooms || 0,
-            sqft: data.sqft || data.square_foot || 0,
+            bedroom: data.bedroom ?? data.beds ?? data.bedrooms ?? '',
+            bathroom: data.bathroom ?? data.baths ?? data.bathrooms ?? '',
+            square_foot: data.square_foot ?? data.sqft ?? '',
+            units: Array.isArray(data.units) ? data.units : [],
             amenities: data.amenities || [],
+            createdAt: data.createdAt || null,
           };
         }) as any[];
 
@@ -67,12 +71,30 @@ export default function PropertyListingsPage() {
     fetchProperties();
   }, []);
 
-  // Apply price filter and sorting
+  // Apply price, bedroom filter, and sorting
   useEffect(() => {
     let result = [...properties];
 
     // Price range filter
     result = result.filter((p) => Number(p.price) <= priceRange);
+
+    // Bedroom configuration filter (matches if project contains a unit with the selected bedroom count)
+    if (selectedBedroomFilter !== 'Any') {
+      result = result.filter((p) => {
+        const unitBeds =
+          p.units && p.units.length > 0
+            ? p.units.map((u) => Number(u.bedroom))
+            : String(p.bedroom || '')
+                .split(',')
+                .map((s) => Number(s.trim()))
+                .filter((n) => !isNaN(n));
+
+        if (selectedBedroomFilter === '4+') {
+          return unitBeds.some((b) => b >= 4);
+        }
+        return unitBeds.includes(Number(selectedBedroomFilter));
+      });
+    }
 
     // Sorting logic
     if (sortBy === 'Price: High to Low') {
@@ -91,10 +113,11 @@ export default function PropertyListingsPage() {
     }
 
     setFilteredProperties(result);
-  }, [properties, priceRange, sortBy]);
+  }, [properties, priceRange, selectedBedroomFilter, sortBy]);
 
   const clearFilters = () => {
     setPriceRange(50000000);
+    setSelectedBedroomFilter('Any');
     setSortBy('Newest Listings');
   };
 
@@ -150,6 +173,29 @@ export default function PropertyListingsPage() {
                   <span>$25M</span>
                   <span>$50M+</span>
                 </div>
+              </div>
+            </div>
+
+            {/* Unit Bedroom Filter */}
+            <div className="space-y-3 pt-4 border-t border-primary/10">
+              <label className="text-xs font-bold uppercase tracking-widest text-primary block">
+                Unit Bedrooms
+              </label>
+              <div className="grid grid-cols-5 gap-2">
+                {['Any', '1', '2', '3', '4+'].map((bed) => (
+                  <button
+                    key={bed}
+                    type="button"
+                    onClick={() => setSelectedBedroomFilter(bed)}
+                    className={`py-2 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
+                      selectedBedroomFilter === bed
+                        ? 'bg-primary text-background-dark border-primary'
+                        : 'bg-white/5 text-slate-300 border-primary/15 hover:border-primary/40'
+                    }`}
+                  >
+                    {bed}
+                  </button>
+                ))}
               </div>
             </div>
           </div>

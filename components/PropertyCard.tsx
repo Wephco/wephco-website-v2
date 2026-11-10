@@ -6,6 +6,7 @@ import { IProperty } from '@/interfaces/propertyInterface';
 import { formatCurrency as format } from '@/lib/utils';
 import Link from 'next/link';
 import { CountryFlag } from './CountryFlag';
+import { BiBed, BiBath, BiArea } from 'react-icons/bi';
 
 export interface PropertyCardProps extends IProperty {
   showModal?: () => void;
@@ -13,17 +14,39 @@ export interface PropertyCardProps extends IProperty {
 }
 
 const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => {
+  const units = props.units && props.units.length > 0 ? props.units : [];
+
+  const bedsDisplay =
+    units.length > 0
+      ? Array.from(new Set(units.map((u) => String(u.bedroom).trim()).filter(Boolean))).join(', ')
+      : Array.isArray(props.bedroom)
+        ? props.bedroom.join(', ')
+        : String(props.bedroom || '');
+
+  const bathsDisplay =
+    units.length > 0
+      ? Array.from(new Set(units.map((u) => String(u.bathroom).trim()).filter(Boolean))).join(', ')
+      : Array.isArray(props.bathroom)
+        ? props.bathroom.join(', ')
+        : String(props.bathroom || '');
+
+  const sqftDisplay =
+    units.length > 0
+      ? Array.from(new Set(units.map((u) => String(u.square_foot).trim()).filter(Boolean))).join(', ')
+      : Array.isArray(props.square_foot)
+        ? props.square_foot.join(', ')
+        : String(props.square_foot || '');
 
   return (
     <div
-      className='w-full max-w-xs sm:max-w-sm md:w-96 h-115 font-display z-10'
+      className='w-full max-w-xs sm:max-w-sm md:w-96 h-122 font-display z-10'
     >
       <div
         className='relative w-full h-full transition-transform duration-500 [transform-3d]'
       >
         {/* --- FRONT SIDE --- */}
         <div className='absolute inset-0 backface-hidden bg-secondary/20 rounded-xl border border-primary/10 hover:border-primary/40 transition-all duration-500 overflow-hidden flex flex-col justify-between shadow-xl shadow-black/20 group'>
-          <div className='relative w-full h-56 cursor-pointer overflow-hidden'>
+          <div className='relative w-full h-52 cursor-pointer overflow-hidden'>
             {props.images && props.images[0] ? (
               <Image
                 src={props.images[0]}
@@ -43,8 +66,32 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
               <h4 className='text-white text-lg font-light tracking-tight'>{props.title}</h4>
             </div>
           </div>
-          <div className='p-6 flex flex-col gap-4 flex-1 justify-between'>
+          <div className='p-6 flex flex-col gap-3 flex-1 justify-between'>
             <p className='text-slate-300 text-sm font-light line-clamp-2 leading-relaxed'>{props.description}</p>
+
+            {/* Unit Configurations Summary */}
+            {(bedsDisplay || bathsDisplay || sqftDisplay) && (
+              <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-300 border-y border-primary/10 py-2">
+                {bedsDisplay && (
+                  <span className="inline-flex items-center gap-1">
+                    <BiBed className="text-primary text-sm" />
+                    <span>{bedsDisplay} Bed(s)</span>
+                  </span>
+                )}
+                {bathsDisplay && (
+                  <span className="inline-flex items-center gap-1">
+                    <BiBath className="text-primary text-sm" />
+                    <span>{bathsDisplay} Bath(s)</span>
+                  </span>
+                )}
+                {sqftDisplay && (
+                  <span className="inline-flex items-center gap-1">
+                    <BiArea className="text-primary text-sm" />
+                    <span className="truncate max-w-28">{sqftDisplay} Sq Ft</span>
+                  </span>
+                )}
+              </div>
+            )}
 
             <div className="flex justify-between items-center text-slate-400 text-xs font-semibold">
               <span className='flex items-center gap-1.5 font-mono uppercase tracking-wider text-[10px]'>
@@ -59,7 +106,7 @@ const PropertyCard = ({ showModal, openModal, ...props }: PropertyCardProps) => 
               href={`/properties/${props.id}`}
               className='w-full py-3 border border-primary/30 text-primary hover:bg-primary hover:text-background-dark font-bold text-xs tracking-widest uppercase rounded-lg transition-all duration-300 cursor-pointer flex items-center justify-center'
             >
-              View Property
+              View Project
             </Link>
           </div>
         </div>

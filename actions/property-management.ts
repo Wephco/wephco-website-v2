@@ -1,7 +1,11 @@
 'use server';
 
 import { db, storage } from '@/firebase/firebaseConfig';
-import { IProperty, IPropertyAgent } from '@/interfaces/propertyInterface';
+import {
+  IProperty,
+  IPropertyAgent,
+  IPropertyUnit,
+} from '@/interfaces/propertyInterface';
 import { serializeDoc } from '@/lib/utils';
 
 export async function getProperties() {
@@ -32,6 +36,8 @@ export async function createProperty(formData: FormData) {
   const bedroom = formData.get('bedroom') as string || '';
   const bathroom = formData.get('bathroom') as string || '';
   const square_foot = formData.get('square_foot') as string || '';
+  const unitsRaw = formData.get('units') as string;
+  const units: IPropertyUnit[] = unitsRaw ? JSON.parse(unitsRaw) : [];
   const verified = formData.get('verified') === 'true';
   const featured = formData.get('featured') === 'true';
   const agentRaw = formData.get('agent') as string;
@@ -55,6 +61,7 @@ export async function createProperty(formData: FormData) {
     bedroom,
     bathroom,
     square_foot,
+    units,
     verified,
     featured: featured || false,
     agent,
@@ -83,6 +90,8 @@ export async function updateProperty(id: string, formData: FormData) {
   const bedroom = formData.get('bedroom') as string || '';
   const bathroom = formData.get('bathroom') as string || '';
   const square_foot = formData.get('square_foot') as string || '';
+  const unitsRaw = formData.get('units') as string;
+  const units: IPropertyUnit[] = unitsRaw ? JSON.parse(unitsRaw) : [];
   const verified = formData.get('verified') === 'true';
   const agentRaw = formData.get('agent') as string;
   const agent: IPropertyAgent | null = agentRaw ? JSON.parse(agentRaw) : null;
@@ -144,6 +153,7 @@ export async function updateProperty(id: string, formData: FormData) {
     bedroom,
     bathroom,
     square_foot,
+    units,
     verified,
     interests,
     pdfUrl,
@@ -237,6 +247,7 @@ export async function submitPropertyForSale(formData: IProperty) {
     bedroom: formData.bedroom,
     square_foot: formData.square_foot,
     bathroom: formData.bathroom,
+    units: formData.units || [],
     pdfUrl: formData.pdfUrl,
     images: formData.images,
     verified: formData.verified,

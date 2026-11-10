@@ -112,6 +112,61 @@ export default async function PropertyDetailPage({
                 {property.yieldValue}%
               </span>
             </div>
+
+            {/* Project Unit Configurations */}
+            <div className="border-b pb-3 pt-1 space-y-2">
+              <span className="text-slate-500 text-sm block font-medium">
+                Available Unit Configurations
+              </span>
+              {property.units && property.units.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {property.units.map((u, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-slate-50 border border-slate-200/80 rounded-lg px-3 py-2 text-xs flex items-center justify-between"
+                    >
+                      <span className="font-semibold text-slate-800">
+                        {u.bedroom} {Number(u.bedroom) === 1 ? 'Bed' : 'Beds'}
+                      </span>
+                      <span className="text-slate-600">
+                        {u.bathroom}{' '}
+                        {Number(u.bathroom) === 1 ? 'Bath' : 'Baths'}
+                      </span>
+                      <span className="font-mono text-slate-700">
+                        {u.square_foot} sq ft
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-3 gap-2 bg-slate-50 border border-slate-200/80 rounded-lg p-2.5 text-xs text-center">
+                  <div>
+                    <span className="text-slate-400 block">Bedrooms</span>
+                    <span className="font-semibold text-slate-800">
+                      {Array.isArray(property.bedroom)
+                        ? property.bedroom.join(', ')
+                        : property.bedroom || 'N/A'}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block">Bathrooms</span>
+                    <span className="font-semibold text-slate-800">
+                      {Array.isArray(property.bathroom)
+                        ? property.bathroom.join(', ')
+                        : property.bathroom || 'N/A'}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block">Sq Ft</span>
+                    <span className="font-semibold text-slate-800">
+                      {Array.isArray(property.square_foot)
+                        ? property.square_foot.join(', ')
+                        : property.square_foot || 'N/A'}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
             {property.pdfUrl && (
               <div className="flex justify-between border-b pb-2">
                 <span className="text-muted-foreground">PDF Brochure</span>
