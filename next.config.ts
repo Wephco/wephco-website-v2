@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['firebase-admin'],
   experimental: {
     authInterrupts: true,
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
   },
   images: {
     remotePatterns: [

@@ -6,13 +6,17 @@ import aldar from '@/images/aldar.png'
 import damac from '@/images/damac.svg'
 import sober from '@/images/sober.png'
 import aarano from '@/images/aarano.png'
-import { MdDashboard, MdChatBubble, MdAttachMoney, MdVerifiedUser, MdNotifications, MdAnalytics, MdEvent, MdContactPhone, MdOutlineAssignment } from "react-icons/md";
+import { MdDashboard, MdChatBubble, MdAttachMoney, MdVerifiedUser, MdNotifications, MdAnalytics, MdEvent, MdContactPhone, MdOutlineAssignment, MdWork } from "react-icons/md";
 import { BiBuildings, BiSupport } from "react-icons/bi";
 import { BsPeopleFill } from "react-icons/bs";
 import { Role } from "@/interfaces/userInterface";
 
 
 export const navbarMenu = [
+    {
+        label: 'Home',
+        path: '/'
+    },
     {
         label: 'Buy',
         path: '/properties'
@@ -180,6 +184,11 @@ export const dashboardMenu = [
         icon: MdOutlineAssignment,
         path: '/dashboard/project-waitlist'
     },
+    {
+        label: 'Careers',
+        icon: MdWork,
+        path: '/dashboard/careers'
+    },
 ]
 
 export const allowedRoles = [Role.ADMIN, Role.SUPERADMIN, Role.SUPPORT]
@@ -236,7 +245,7 @@ export const wephcoServices = {
             description: 'Beyond acquisition, Wephco offers professional property management — handling leasing, tenant placement, and asset maintenance to ensure steady rental income and value protection.'
         },
         {
-            title: 'Renovation & Interior/Exterior Design',
+            title: 'Wephco Signature Living',
             description: 'Through our design and renovation division, we transform properties into modern, market-ready assets. From upscale interiors to structural enhancements, we maximize property value and appeal.'
         },
         {
@@ -287,6 +296,7 @@ export const FIRESTORE_COLLECTIONS = {
     KYC: 'kyc',
     INQUIRY: 'inquiry',
     JOB_APPLICATIONS: 'job_applications',
+    CAREERS: 'careers',
     AFFILIATES: 'affiliates',
     EVENTS: 'events',
     MAGAZINES: 'magazines',

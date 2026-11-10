@@ -9,9 +9,12 @@ import { storage } from '@/firebase/firebaseClient';
 // import { v4 as uuidv4 } from 'uuid';
 
 export async function uploadFile(file: File, path: string): Promise<string> {
-  const fileRef = ref(storage, `${path}/${Date.now()}_${file.name}`);
-  await uploadBytes(fileRef, file);
-  return await getDownloadURL(fileRef);
+  const sanitizedName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const fileRef = ref(storage, `${path}/${Date.now()}_${sanitizedName}`);
+  const snapshot = await uploadBytes(fileRef, file, {
+    contentType: file.type || 'application/octet-stream',
+  });
+  return await getDownloadURL(snapshot.ref);
 }
 
 
