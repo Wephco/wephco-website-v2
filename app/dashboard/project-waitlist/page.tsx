@@ -23,7 +23,6 @@ import {
   FileText,
   Lock,
   Layers,
-  ArrowUpRight,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -38,7 +37,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
   IProjectWaitlistConfig,
@@ -256,39 +261,42 @@ export default function DashboardProjectWaitlistPage() {
     return matchesSearch && matchesStatus;
   });
 
+  const inputClassName =
+    'mt-1 bg-white text-black placeholder:text-black/50 border-gray-300 focus-visible:ring-[#cfb53b]';
+
   return (
-    <div className="space-y-8 p-4 md:p-8 max-w-7xl mx-auto">
+    <div className="space-y-8 p-4 md:p-8 max-w-7xl mx-auto text-black">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b pb-5">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-gray-200 pb-5">
         <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+          <h1 className="text-3xl font-extrabold text-black tracking-tight flex items-center gap-2">
             <Layers className="w-8 h-8 text-[#cfb53b]" />
             Project Waitlist Manager
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-black mt-1">
             View, customize, and manage the website VIP Project Waitlist showcase and user registrations.
           </p>
         </div>
 
         {/* Tab Selector */}
-        <div className="flex items-center gap-2 bg-slate-100 p-1.5 rounded-xl border">
+        <div className="flex items-center gap-2 bg-white p-1.5 rounded-xl border border-gray-200">
           <button
             onClick={() => setActiveTab('config')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
               activeTab === 'config'
-                ? 'bg-white text-slate-900 shadow-xs border'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-[#fef9e8] text-black shadow-xs border border-[#cfb53b]/40'
+                : 'text-black hover:bg-gray-100'
             }`}
           >
             <FileText className="w-4 h-4 text-[#cfb53b]" />
-            Showcase Content & Settings
+            Showcase Content &amp; Settings
           </button>
           <button
             onClick={() => setActiveTab('submissions')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
               activeTab === 'submissions'
-                ? 'bg-white text-slate-900 shadow-xs border'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-[#fef9e8] text-black shadow-xs border border-[#cfb53b]/40'
+                : 'text-black hover:bg-gray-100'
             }`}
           >
             <Users className="w-4 h-4 text-[#cfb53b]" />
@@ -303,20 +311,20 @@ export default function DashboardProjectWaitlistPage() {
           {/* Main Form Fields */}
           <div className="lg:col-span-8 space-y-6">
             {/* Header Titles & Descriptions */}
-            <Card>
+            <Card className="bg-white text-black border-gray-200 shadow-sm">
               <CardHeader>
-                <CardTitle className="text-lg font-bold flex items-center gap-2">
+                <CardTitle className="text-lg font-bold text-black flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-[#cfb53b]" />
                   Main Section Headlines
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-black">
                   Configure the primary title, highlighted phrase, and subtitle displayed at the top of the component.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-xs font-bold uppercase text-slate-600">
+                    <Label className="text-xs font-bold uppercase text-black">
                       Title Prefix
                     </Label>
                     <Input
@@ -325,12 +333,12 @@ export default function DashboardProjectWaitlistPage() {
                         setConfig({ ...config, title: e.target.value })
                       }
                       placeholder="e.g. The Canopies at"
-                      className="mt-1"
+                      className={inputClassName}
                     />
                   </div>
 
                   <div>
-                    <Label className="text-xs font-bold uppercase text-slate-600">
+                    <Label className="text-xs font-bold uppercase text-black">
                       Title Highlight (Gold)
                     </Label>
                     <Input
@@ -339,13 +347,13 @@ export default function DashboardProjectWaitlistPage() {
                         setConfig({ ...config, titleHighlight: e.target.value })
                       }
                       placeholder="e.g. Yas Point"
-                      className="mt-1"
+                      className={inputClassName}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <Label className="text-xs font-bold uppercase text-slate-600">
+                  <Label className="text-xs font-bold uppercase text-black">
                     Subtitle / Description
                   </Label>
                   <Textarea
@@ -355,13 +363,13 @@ export default function DashboardProjectWaitlistPage() {
                     }
                     rows={3}
                     placeholder="Enter subtitle description..."
-                    className="mt-1"
+                    className={inputClassName}
                   />
                 </div>
 
                 <div>
-                  <Label className="text-xs font-bold uppercase text-slate-600">
-                    Internal Project Name (Used in email & submission records)
+                  <Label className="text-xs font-bold uppercase text-black">
+                    Internal Project Name (Used in email &amp; submission records)
                   </Label>
                   <Input
                     value={config.projectName}
@@ -369,23 +377,23 @@ export default function DashboardProjectWaitlistPage() {
                       setConfig({ ...config, projectName: e.target.value })
                     }
                     placeholder="e.g. The Canopies at Yas Point"
-                    className="mt-1"
+                    className={inputClassName}
                   />
                 </div>
               </CardContent>
             </Card>
 
             {/* Showcase Image & Badges */}
-            <Card>
+            <Card className="bg-white text-black border-gray-200 shadow-sm">
               <CardHeader>
-                <CardTitle className="text-lg font-bold flex items-center gap-2">
+                <CardTitle className="text-lg font-bold text-black flex items-center gap-2">
                   <Upload className="w-5 h-5 text-[#cfb53b]" />
-                  Showcase Image & Badges
+                  Showcase Image &amp; Badges
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label className="text-xs font-bold uppercase text-slate-600">
+                  <Label className="text-xs font-bold uppercase text-black">
                     Project Image URL or Upload
                   </Label>
                   <div className="flex items-center gap-3 mt-1">
@@ -395,7 +403,7 @@ export default function DashboardProjectWaitlistPage() {
                         setConfig({ ...config, image: e.target.value })
                       }
                       placeholder="e.g. /images/pdf-about/project_canopies_yas_point.png or https://..."
-                      className="flex-1"
+                      className="flex-1 bg-white text-black placeholder:text-black/50 border-gray-300"
                     />
                     <input
                       type="file"
@@ -409,12 +417,12 @@ export default function DashboardProjectWaitlistPage() {
                       variant="outline"
                       disabled={uploadingImage}
                       onClick={() => fileInputRef.current?.click()}
-                      className="flex items-center gap-2"
+                      className="flex items-center gap-2 bg-white text-black border-gray-300 hover:bg-gray-100"
                     >
                       {uploadingImage ? (
-                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <RefreshCw className="w-4 h-4 animate-spin text-black" />
                       ) : (
-                        <Upload className="w-4 h-4" />
+                        <Upload className="w-4 h-4 text-black" />
                       )}
                       Upload Image
                     </Button>
@@ -423,7 +431,7 @@ export default function DashboardProjectWaitlistPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-xs font-bold uppercase text-slate-600">
+                    <Label className="text-xs font-bold uppercase text-black">
                       Phase Badge Text
                     </Label>
                     <Input
@@ -432,12 +440,12 @@ export default function DashboardProjectWaitlistPage() {
                         setConfig({ ...config, phaseBadge: e.target.value })
                       }
                       placeholder="e.g. Pre-Launch Phase 1"
-                      className="mt-1"
+                      className={inputClassName}
                     />
                   </div>
 
                   <div>
-                    <Label className="text-xs font-bold uppercase text-slate-600">
+                    <Label className="text-xs font-bold uppercase text-black">
                       Location Badge Text
                     </Label>
                     <Input
@@ -446,7 +454,7 @@ export default function DashboardProjectWaitlistPage() {
                         setConfig({ ...config, locationBadge: e.target.value })
                       }
                       placeholder="e.g. Yas Island, Abu Dhabi"
-                      className="mt-1"
+                      className={inputClassName}
                     />
                   </div>
                 </div>
@@ -454,16 +462,16 @@ export default function DashboardProjectWaitlistPage() {
             </Card>
 
             {/* Performance Specs */}
-            <Card>
+            <Card className="bg-white text-black border-gray-200 shadow-sm">
               <CardHeader>
-                <CardTitle className="text-lg font-bold flex items-center gap-2">
+                <CardTitle className="text-lg font-bold text-black flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-[#cfb53b]" />
                   Performance Specs (Stats Bar)
                 </CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <Label className="text-xs font-bold uppercase text-slate-600">
+                  <Label className="text-xs font-bold uppercase text-black">
                     Target Yield
                   </Label>
                   <Input
@@ -472,12 +480,12 @@ export default function DashboardProjectWaitlistPage() {
                       setConfig({ ...config, targetYield: e.target.value })
                     }
                     placeholder="e.g. 9.8% p.a."
-                    className="mt-1"
+                    className={inputClassName}
                   />
                 </div>
 
                 <div>
-                  <Label className="text-xs font-bold uppercase text-slate-600">
+                  <Label className="text-xs font-bold uppercase text-black">
                     Handover Date
                   </Label>
                   <Input
@@ -486,12 +494,12 @@ export default function DashboardProjectWaitlistPage() {
                       setConfig({ ...config, handover: e.target.value })
                     }
                     placeholder="e.g. Q4 2027"
-                    className="mt-1"
+                    className={inputClassName}
                   />
                 </div>
 
                 <div>
-                  <Label className="text-xs font-bold uppercase text-slate-600">
+                  <Label className="text-xs font-bold uppercase text-black">
                     Allocation Percentage
                   </Label>
                   <Input
@@ -500,20 +508,20 @@ export default function DashboardProjectWaitlistPage() {
                       setConfig({ ...config, allocation: e.target.value })
                     }
                     placeholder="e.g. 84% Reserved"
-                    className="mt-1"
+                    className={inputClassName}
                   />
                 </div>
               </CardContent>
             </Card>
 
             {/* Project Highlights Builder */}
-            <Card>
+            <Card className="bg-white text-black border-gray-200 shadow-sm">
               <CardHeader>
-                <CardTitle className="text-lg font-bold flex items-center gap-2">
+                <CardTitle className="text-lg font-bold text-black flex items-center gap-2">
                   <Award className="w-5 h-5 text-[#cfb53b]" />
                   Key Project Highlights (3 Feature Cards)
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-black">
                   Feature cards displayed directly under the main project image showcase.
                 </CardDescription>
               </CardHeader>
@@ -522,22 +530,25 @@ export default function DashboardProjectWaitlistPage() {
                   {config.highlights?.map((h) => (
                     <div
                       key={h.id}
-                      className="p-3 bg-slate-50 border rounded-xl flex items-center justify-between gap-4"
+                      className="p-3 bg-white border border-gray-200 rounded-xl flex items-center justify-between gap-4"
                     >
                       <div className="flex items-center gap-3">
-                        <Badge variant="outline" className="text-xs font-mono">
+                        <Badge
+                          variant="outline"
+                          className="text-xs font-mono bg-white text-black border-gray-300"
+                        >
                           {h.icon}
                         </Badge>
                         <div>
-                          <p className="text-xs font-bold text-slate-800">{h.title}</p>
-                          <p className="text-[11px] text-slate-500">{h.description}</p>
+                          <p className="text-xs font-bold text-black">{h.title}</p>
+                          <p className="text-[11px] text-black">{h.description}</p>
                         </div>
                       </div>
                       <Button
                         size="icon"
                         variant="ghost"
                         onClick={() => removeHighlight(h.id)}
-                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                        className="text-black hover:text-red-600 hover:bg-red-50"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -545,11 +556,11 @@ export default function DashboardProjectWaitlistPage() {
                   ))}
                 </div>
 
-                <div className="border-t pt-4 space-y-3">
-                  <p className="text-xs font-bold text-slate-700">Add New Highlight</p>
+                <div className="border-t border-gray-200 pt-4 space-y-3">
+                  <p className="text-xs font-bold text-black">Add New Highlight</p>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
-                      <Label className="text-[10px] font-bold uppercase text-slate-500">
+                      <Label className="text-[10px] font-bold uppercase text-black">
                         Icon
                       </Label>
                       <select
@@ -557,10 +568,10 @@ export default function DashboardProjectWaitlistPage() {
                         onChange={(e) =>
                           setNewHighlight({ ...newHighlight, icon: e.target.value })
                         }
-                        className="w-full mt-1 border rounded-lg p-2 text-xs bg-white"
+                        className="w-full mt-1 border border-gray-300 rounded-lg p-2 text-xs bg-white text-black"
                       >
                         {AVAILABLE_ICONS.map((icon) => (
-                          <option key={icon} value={icon}>
+                          <option key={icon} value={icon} className="text-black bg-white">
                             {icon}
                           </option>
                         ))}
@@ -568,7 +579,7 @@ export default function DashboardProjectWaitlistPage() {
                     </div>
 
                     <div>
-                      <Label className="text-[10px] font-bold uppercase text-slate-500">
+                      <Label className="text-[10px] font-bold uppercase text-black">
                         Title
                       </Label>
                       <Input
@@ -577,44 +588,47 @@ export default function DashboardProjectWaitlistPage() {
                           setNewHighlight({ ...newHighlight, title: e.target.value })
                         }
                         placeholder="e.g. VIP Floor Choice"
-                        className="mt-1 text-xs"
+                        className="mt-1 text-xs bg-white text-black placeholder:text-black/50 border-gray-300"
                       />
                     </div>
 
                     <div>
-                      <Label className="text-[10px] font-bold uppercase text-slate-500">
+                      <Label className="text-[10px] font-bold uppercase text-black">
                         Description
                       </Label>
                       <Input
                         value={newHighlight.description}
                         onChange={(e) =>
-                          setNewHighlight({ ...newHighlight, description: e.target.value })
+                          setNewHighlight({
+                            ...newHighlight,
+                            description: e.target.value,
+                          })
                         }
                         placeholder="Short description..."
-                        className="mt-1 text-xs"
+                        className="mt-1 text-xs bg-white text-black placeholder:text-black/50 border-gray-300"
                       />
                     </div>
                   </div>
                   <Button
                     type="button"
-                    variant="secondary"
+                    variant="outline"
                     onClick={addHighlight}
-                    className="w-full text-xs font-bold flex items-center justify-center gap-1 mt-2"
+                    className="w-full text-xs font-bold flex items-center justify-center gap-1 mt-2 bg-white text-black border-gray-300 hover:bg-gray-100"
                   >
-                    <Plus className="w-4 h-4" /> Add Highlight
+                    <Plus className="w-4 h-4 text-black" /> Add Highlight
                   </Button>
                 </div>
               </CardContent>
             </Card>
 
             {/* Preferred Unit Options */}
-            <Card>
+            <Card className="bg-white text-black border-gray-200 shadow-sm">
               <CardHeader>
-                <CardTitle className="text-lg font-bold flex items-center gap-2">
+                <CardTitle className="text-lg font-bold text-black flex items-center gap-2">
                   <Building2 className="w-5 h-5 text-[#cfb53b]" />
                   Preferred Unit Category Options
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-black">
                   Options available in the signup form select dropdown.
                 </CardDescription>
               </CardHeader>
@@ -623,13 +637,13 @@ export default function DashboardProjectWaitlistPage() {
                   {config.unitCategories?.map((cat) => (
                     <Badge
                       key={cat}
-                      variant="secondary"
-                      className="px-3 py-1.5 text-xs font-semibold flex items-center gap-2"
+                      variant="outline"
+                      className="px-3 py-1.5 text-xs font-semibold flex items-center gap-2 bg-white text-black border-gray-300"
                     >
                       {cat}
                       <button
                         onClick={() => removeUnitCategory(cat)}
-                        className="hover:text-red-600 transition-colors"
+                        className="text-black hover:text-red-600 transition-colors"
                       >
                         ×
                       </button>
@@ -642,7 +656,7 @@ export default function DashboardProjectWaitlistPage() {
                     value={newUnitCategory}
                     onChange={(e) => setNewUnitCategory(e.target.value)}
                     placeholder="e.g. 5 Bedroom Sky Mansion"
-                    className="text-xs flex-1"
+                    className="text-xs flex-1 bg-white text-black placeholder:text-black/50 border-gray-300"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
@@ -654,28 +668,28 @@ export default function DashboardProjectWaitlistPage() {
                     type="button"
                     variant="outline"
                     onClick={addUnitCategory}
-                    className="text-xs font-bold"
+                    className="text-xs font-bold bg-white text-black border-gray-300 hover:bg-gray-100"
                   >
-                    <Plus className="w-4 h-4 mr-1" /> Add Category
+                    <Plus className="w-4 h-4 mr-1 text-black" /> Add Category
                   </Button>
                 </div>
               </CardContent>
             </Card>
 
             {/* Action Bar */}
-            <div className="sticky bottom-6 bg-white/90 backdrop-blur-md p-4 rounded-2xl border shadow-xl flex items-center justify-between">
-              <p className="text-xs text-slate-500">
+            <div className="sticky bottom-6 bg-white p-4 rounded-2xl border border-gray-200 shadow-xl flex items-center justify-between">
+              <p className="text-xs text-black">
                 Click save to update the live ProjectWaitlist component on the home page.
               </p>
               <Button
                 onClick={handleSaveConfig}
                 disabled={savingConfig}
-                className="bg-[#cfb53b] hover:bg-[#b89f30] text-slate-950 font-bold px-6 py-2.5 flex items-center gap-2"
+                className="bg-[#cfb53b] hover:bg-[#b89f30] text-black font-bold px-6 py-2.5 flex items-center gap-2"
               >
                 {savingConfig ? (
-                  <RefreshCw className="w-4 h-4 animate-spin" />
+                  <RefreshCw className="w-4 h-4 animate-spin text-black" />
                 ) : (
-                  <Save className="w-4 h-4" />
+                  <Save className="w-4 h-4 text-black" />
                 )}
                 Save Changes
               </Button>
@@ -685,33 +699,33 @@ export default function DashboardProjectWaitlistPage() {
           {/* Right Column: Live Component Preview */}
           <div className="lg:col-span-4 space-y-6">
             <div className="sticky top-6">
-              <Card className="border-2 border-[#cfb53b]/30 shadow-xl overflow-hidden bg-slate-950 text-white">
-                <CardHeader className="border-b border-slate-800 bg-slate-900/80 py-3 px-4">
+              <Card className="border-2 border-[#cfb53b]/40 shadow-xl overflow-hidden bg-white text-black">
+                <CardHeader className="border-b border-gray-200 bg-white py-3 px-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#cfb53b] flex items-center gap-1.5 uppercase tracking-wider">
-                      <Eye className="w-4 h-4" /> Live Preview
+                    <span className="text-xs font-bold text-black flex items-center gap-1.5 uppercase tracking-wider">
+                      <Eye className="w-4 h-4 text-[#cfb53b]" /> Live Preview
                     </span>
-                    <Badge className="bg-[#cfb53b]/20 text-[#cfb53b] border-none text-[10px]">
+                    <Badge className="bg-[#fef9e8] text-black border border-[#cfb53b]/40 text-[10px]">
                       Homepage Component
                     </Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="p-4 space-y-4 font-display text-xs">
+                <CardContent className="p-4 space-y-4 font-display text-xs text-black">
                   {/* Headline Preview */}
                   <div className="text-center space-y-1">
-                    <h3 className="text-lg font-light text-white">
+                    <h3 className="text-lg font-bold text-black">
                       {config.title || 'The Canopies at'}{' '}
-                      <span className="font-black italic text-[#cfb53b]">
+                      <span className="font-black italic text-black underline decoration-[#cfb53b]">
                         {config.titleHighlight || 'Yas Point'}
                       </span>
                     </h3>
-                    <p className="text-[11px] text-slate-400 font-light line-clamp-2">
+                    <p className="text-[11px] text-black font-normal line-clamp-2">
                       {config.subtitle}
                     </p>
                   </div>
 
                   {/* Image Card Preview */}
-                  <div className="relative aspect-16/10 rounded-xl overflow-hidden border border-primary/30">
+                  <div className="relative aspect-16/10 rounded-xl overflow-hidden border border-gray-200">
                     <Image
                       src={
                         config.image ||
@@ -721,43 +735,42 @@ export default function DashboardProjectWaitlistPage() {
                       fill
                       className="object-cover"
                     />
-                    <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-950/20 to-transparent" />
                     <div className="absolute top-2 left-2 flex gap-1">
-                      <span className="bg-[#cfb53b] text-slate-950 font-extrabold text-[9px] px-2 py-0.5 rounded">
+                      <span className="bg-white text-black font-extrabold text-[9px] px-2 py-0.5 rounded shadow">
                         {config.phaseBadge}
                       </span>
                     </div>
-                    <div className="absolute bottom-2 left-2 right-2 bg-slate-900/90 border border-primary/30 p-2 rounded-lg grid grid-cols-3 gap-1 text-center text-[9px]">
+                    <div className="absolute bottom-2 left-2 right-2 bg-white/95 border border-gray-200 p-2 rounded-lg grid grid-cols-3 gap-1 text-center text-[9px] text-black">
                       <div>
-                        <p className="text-slate-400 font-bold uppercase">Yield</p>
-                        <p className="font-black text-[#cfb53b]">{config.targetYield}</p>
+                        <p className="text-black font-bold uppercase">Yield</p>
+                        <p className="font-black text-black">{config.targetYield}</p>
                       </div>
-                      <div className="border-x border-primary/20">
-                        <p className="text-slate-400 font-bold uppercase">Handover</p>
-                        <p className="font-black text-white">{config.handover}</p>
+                      <div className="border-x border-gray-200">
+                        <p className="text-black font-bold uppercase">Handover</p>
+                        <p className="font-black text-black">{config.handover}</p>
                       </div>
                       <div>
-                        <p className="text-slate-400 font-bold uppercase">Reserved</p>
-                        <p className="font-black text-emerald-400">{config.allocation}</p>
+                        <p className="text-black font-bold uppercase">Reserved</p>
+                        <p className="font-black text-black">{config.allocation}</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Highlights Preview */}
                   <div className="space-y-1.5">
-                    <p className="text-[10px] font-bold uppercase text-slate-400">
+                    <p className="text-[10px] font-bold uppercase text-black">
                       Highlights ({config.highlights?.length || 0})
                     </p>
                     <div className="space-y-1">
                       {config.highlights?.map((h) => (
                         <div
                           key={h.id}
-                          className="bg-slate-900/80 border border-white/10 p-2 rounded-lg flex items-center justify-between"
+                          className="bg-white border border-gray-200 p-2 rounded-lg flex items-center justify-between"
                         >
-                          <span className="font-bold text-white text-[11px]">
+                          <span className="font-bold text-black text-[11px]">
                             {h.title}
                           </span>
-                          <span className="text-[10px] text-slate-400">
+                          <span className="text-[10px] text-black">
                             {h.description}
                           </span>
                         </div>
@@ -767,11 +780,12 @@ export default function DashboardProjectWaitlistPage() {
 
                   {/* Preferred Units Preview */}
                   <div className="space-y-1">
-                    <p className="text-[10px] font-bold uppercase text-slate-400">
+                    <p className="text-[10px] font-bold uppercase text-black">
                       Unit Categories ({config.unitCategories?.length || 0})
                     </p>
-                    <div className="bg-slate-900 p-2 rounded-lg text-[11px] text-slate-300">
-                      {config.unitCategories?.[0]} + {Math.max(0, (config.unitCategories?.length || 0) - 1)} more
+                    <div className="bg-white border border-gray-200 p-2 rounded-lg text-[11px] text-black">
+                      {config.unitCategories?.[0]} +{' '}
+                      {Math.max(0, (config.unitCategories?.length || 0) - 1)} more
                     </div>
                   </div>
                 </CardContent>
@@ -786,13 +800,13 @@ export default function DashboardProjectWaitlistPage() {
         <div className="space-y-6">
           {/* Submissions Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Card>
+            <Card className="bg-white text-black border-gray-200 shadow-sm">
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-slate-500 font-medium uppercase">
+                  <p className="text-xs text-black font-medium uppercase">
                     Total VIP Registrations
                   </p>
-                  <h3 className="text-2xl font-black text-slate-900 mt-1">
+                  <h3 className="text-2xl font-black text-black mt-1">
                     {submissions.length}
                   </h3>
                 </div>
@@ -802,13 +816,13 @@ export default function DashboardProjectWaitlistPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-white text-black border-gray-200 shadow-sm">
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-slate-500 font-medium uppercase">
+                  <p className="text-xs text-black font-medium uppercase">
                     Pending Allocation Access
                   </p>
-                  <h3 className="text-2xl font-black text-slate-900 mt-1">
+                  <h3 className="text-2xl font-black text-black mt-1">
                     {
                       submissions.filter(
                         (s) => !s.status || s.status === 'pending_vip_access'
@@ -822,13 +836,13 @@ export default function DashboardProjectWaitlistPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-white text-black border-gray-200 shadow-sm">
               <CardContent className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-slate-500 font-medium uppercase">
+                  <p className="text-xs text-black font-medium uppercase">
                     Contacted / Converted
                   </p>
-                  <h3 className="text-2xl font-black text-slate-900 mt-1">
+                  <h3 className="text-2xl font-black text-black mt-1">
                     {
                       submissions.filter(
                         (s) => s.status === 'contacted' || s.status === 'converted'
@@ -844,28 +858,36 @@ export default function DashboardProjectWaitlistPage() {
           </div>
 
           {/* Filter & Refresh Controls */}
-          <Card>
+          <Card className="bg-white text-black border-gray-200 shadow-sm">
             <CardHeader className="py-4">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-center gap-3 flex-1 max-w-md">
                   <div className="relative flex-1">
-                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-black" />
                     <Input
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       placeholder="Search name, email, phone, or unit type..."
-                      className="pl-9 text-xs"
+                      className="pl-9 text-xs bg-white text-black placeholder:text-black/50 border-gray-300"
                     />
                   </div>
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="border rounded-lg p-2 text-xs bg-white text-slate-700"
+                    className="border border-gray-300 rounded-lg p-2 text-xs bg-white text-black"
                   >
-                    <option value="all">All Statuses</option>
-                    <option value="pending_vip_access">Pending VIP Access</option>
-                    <option value="contacted">Contacted</option>
-                    <option value="converted">Converted</option>
+                    <option value="all" className="text-black bg-white">
+                      All Statuses
+                    </option>
+                    <option value="pending_vip_access" className="text-black bg-white">
+                      Pending VIP Access
+                    </option>
+                    <option value="contacted" className="text-black bg-white">
+                      Contacted
+                    </option>
+                    <option value="converted" className="text-black bg-white">
+                      Converted
+                    </option>
                   </select>
                 </div>
 
@@ -874,10 +896,10 @@ export default function DashboardProjectWaitlistPage() {
                   size="sm"
                   onClick={loadSubmissionsData}
                   disabled={loadingSubmissions}
-                  className="flex items-center gap-1.5 text-xs"
+                  className="flex items-center gap-1.5 text-xs bg-white text-black border-gray-300 hover:bg-gray-100"
                 >
                   <RefreshCw
-                    className={`w-3.5 h-3.5 ${
+                    className={`w-3.5 h-3.5 text-black ${
                       loadingSubmissions ? 'animate-spin' : ''
                     }`}
                   />
@@ -885,25 +907,25 @@ export default function DashboardProjectWaitlistPage() {
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="p-0 border-t">
+            <CardContent className="p-0 border-t border-gray-200">
               {loadingSubmissions ? (
-                <div className="p-12 text-center text-slate-500 text-xs flex items-center justify-center gap-2">
+                <div className="p-12 text-center text-black text-xs flex items-center justify-center gap-2">
                   <RefreshCw className="w-4 h-4 animate-spin text-[#cfb53b]" />
                   Loading waitlist entries...
                 </div>
               ) : filteredSubmissions.length === 0 ? (
-                <div className="p-12 text-center text-slate-500 text-xs space-y-2">
-                  <FileText className="w-8 h-8 text-slate-300 mx-auto" />
-                  <p className="font-semibold">No waitlist entries found.</p>
-                  <p className="text-slate-400 text-[11px]">
+                <div className="p-12 text-center text-black text-xs space-y-2">
+                  <FileText className="w-8 h-8 text-black mx-auto" />
+                  <p className="font-semibold text-black">No waitlist entries found.</p>
+                  <p className="text-black text-[11px]">
                     User signups from the homepage waitlist form will appear here.
                   </p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs border-collapse">
+                  <table className="w-full text-left text-xs border-collapse text-black">
                     <thead>
-                      <tr className="bg-slate-50 text-slate-600 font-bold border-b uppercase text-[10px] tracking-wider">
+                      <tr className="bg-gray-50 text-black font-bold border-b border-gray-200 uppercase text-[10px] tracking-wider">
                         <th className="p-4">Customer</th>
                         <th className="p-4">Contact Info</th>
                         <th className="p-4">Preferred Unit</th>
@@ -913,30 +935,30 @@ export default function DashboardProjectWaitlistPage() {
                         <th className="p-4 text-right">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 text-slate-700">
+                    <tbody className="divide-y divide-gray-200 text-black">
                       {filteredSubmissions.map((entry) => (
                         <tr
                           key={entry.id}
-                          className="hover:bg-slate-50/80 transition-colors"
+                          className="hover:bg-gray-50 transition-colors"
                         >
-                          <td className="p-4 font-bold text-slate-900">
+                          <td className="p-4 font-bold text-black">
                             {entry.name}
                           </td>
                           <td className="p-4 space-y-0.5">
-                            <p className="text-slate-800 font-medium">{entry.email}</p>
-                            <p className="text-[11px] text-slate-500 font-mono">
+                            <p className="text-black font-medium">{entry.email}</p>
+                            <p className="text-[11px] text-black font-mono">
                               {entry.phoneNumber}
                             </p>
                           </td>
                           <td className="p-4">
                             <Badge
                               variant="outline"
-                              className="text-[11px] bg-slate-50 font-normal"
+                              className="text-[11px] bg-white text-black border-gray-300 font-normal"
                             >
                               {entry.unitType || 'Not specified'}
                             </Badge>
                           </td>
-                          <td className="p-4 font-medium text-slate-800">
+                          <td className="p-4 font-medium text-black">
                             {entry.projectName || 'The Canopies at Yas Point'}
                           </td>
                           <td className="p-4">
@@ -946,22 +968,20 @@ export default function DashboardProjectWaitlistPage() {
                               onChange={(e) =>
                                 handleStatusChange(entry.id!, e.target.value)
                               }
-                              className={`text-[11px] font-bold border rounded-lg p-1.5 cursor-pointer ${
-                                entry.status === 'converted'
-                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
-                                  : entry.status === 'contacted'
-                                  ? 'bg-blue-50 text-blue-700 border-blue-300'
-                                  : 'bg-amber-50 text-amber-700 border-amber-300'
-                              }`}
+                              className="text-[11px] font-bold border border-gray-300 rounded-lg p-1.5 cursor-pointer bg-white text-black"
                             >
-                              <option value="pending_vip_access">
+                              <option value="pending_vip_access" className="text-black bg-white">
                                 Pending VIP Access
                               </option>
-                              <option value="contacted">Contacted</option>
-                              <option value="converted">Converted</option>
+                              <option value="contacted" className="text-black bg-white">
+                                Contacted
+                              </option>
+                              <option value="converted" className="text-black bg-white">
+                                Converted
+                              </option>
                             </select>
                           </td>
-                          <td className="p-4 text-slate-500 text-[11px]">
+                          <td className="p-4 text-black text-[11px]">
                             {entry.createdAt
                               ? new Date(entry.createdAt).toLocaleDateString(
                                   'en-US',
@@ -981,7 +1001,7 @@ export default function DashboardProjectWaitlistPage() {
                               variant="ghost"
                               disabled={updatingId === entry.id}
                               onClick={() => handleDeleteSubmission(entry.id!)}
-                              className="text-slate-400 hover:text-red-600 hover:bg-red-50"
+                              className="text-black hover:text-red-600 hover:bg-red-50"
                             >
                               <Trash2 className="w-4 h-4" />
                             </Button>
