@@ -67,27 +67,27 @@ const APPLICATION_STATUSES: {
   {
     value: 'pending',
     label: 'Pending Review',
-    badgeClass: 'bg-amber-100 text-amber-800 border-amber-200',
+    badgeClass: 'bg-amber-50 text-black border-amber-200',
   },
   {
     value: 'reviewed',
     label: 'Reviewed',
-    badgeClass: 'bg-blue-100 text-blue-800 border-blue-200',
+    badgeClass: 'bg-blue-50 text-black border-blue-200',
   },
   {
     value: 'shortlisted',
     label: 'Shortlisted',
-    badgeClass: 'bg-purple-100 text-purple-800 border-purple-200',
+    badgeClass: 'bg-purple-50 text-black border-purple-200',
   },
   {
     value: 'hired',
     label: 'Hired',
-    badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    badgeClass: 'bg-emerald-50 text-black border-emerald-200',
   },
   {
     value: 'rejected',
     label: 'Rejected',
-    badgeClass: 'bg-rose-100 text-rose-800 border-rose-200',
+    badgeClass: 'bg-rose-50 text-black border-rose-200',
   },
 ];
 
@@ -377,15 +377,18 @@ export default function DashboardCareersPage() {
     (a) => a.status === 'pending'
   ).length;
 
+  const inputFieldClass =
+    'bg-white text-black placeholder:text-black/50 border-gray-300 focus-visible:ring-[#cfb53b]';
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-black">
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900">
+          <h2 className="text-3xl font-bold tracking-tight text-black">
             Careers Management
           </h2>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-black">
             Create and manage open roles displayed on the public Careers page
             and review incoming candidate applications.
           </p>
@@ -398,16 +401,16 @@ export default function DashboardCareersPage() {
               loadJobs();
               loadApplications();
             }}
-            className="gap-2"
+            className="gap-2 bg-white text-black border-gray-300 hover:bg-gray-100"
           >
-            <RefreshCw className="size-4" />
+            <RefreshCw className="size-4 text-black" />
             Refresh
           </Button>
           <Button
             onClick={handleOpenNewJobModal}
-            className="bg-[#cfb53b] hover:bg-[#b89e2f] text-white gap-2"
+            className="bg-[#cfb53b] hover:bg-[#b89e2f] text-black font-bold gap-2"
           >
-            <Plus className="size-4" />
+            <Plus className="size-4 text-black" />
             Post New Role
           </Button>
         </div>
@@ -415,29 +418,29 @@ export default function DashboardCareersPage() {
 
       {/* Overview Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-slate-200/80 shadow-xs">
+        <Card className="bg-white text-black border-gray-200 shadow-xs">
           <CardContent className="p-5 flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+              <p className="text-xs font-medium text-black uppercase tracking-wider">
                 Total Roles
               </p>
-              <p className="text-2xl font-bold text-slate-900 mt-1">
+              <p className="text-2xl font-bold text-black mt-1">
                 {jobs.length}
               </p>
             </div>
-            <div className="size-11 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center">
+            <div className="size-11 rounded-xl bg-gray-100 text-black flex items-center justify-center">
               <Briefcase className="size-5" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200/80 shadow-xs">
+        <Card className="bg-white text-black border-gray-200 shadow-xs">
           <CardContent className="p-5 flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+              <p className="text-xs font-medium text-black uppercase tracking-wider">
                 Published Openings
               </p>
-              <p className="text-2xl font-bold text-emerald-600 mt-1">
+              <p className="text-2xl font-bold text-black mt-1">
                 {activeJobsCount}
               </p>
             </div>
@@ -447,13 +450,13 @@ export default function DashboardCareersPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200/80 shadow-xs">
+        <Card className="bg-white text-black border-gray-200 shadow-xs">
           <CardContent className="p-5 flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+              <p className="text-xs font-medium text-black uppercase tracking-wider">
                 Total Applications
               </p>
-              <p className="text-2xl font-bold text-slate-900 mt-1">
+              <p className="text-2xl font-bold text-black mt-1">
                 {applications.length}
               </p>
             </div>
@@ -463,13 +466,13 @@ export default function DashboardCareersPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-slate-200/80 shadow-xs">
+        <Card className="bg-white text-black border-gray-200 shadow-xs">
           <CardContent className="p-5 flex items-center justify-between">
             <div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+              <p className="text-xs font-medium text-black uppercase tracking-wider">
                 Pending Review
               </p>
-              <p className="text-2xl font-bold text-amber-600 mt-1">
+              <p className="text-2xl font-bold text-black mt-1">
                 {pendingAppsCount}
               </p>
             </div>
@@ -481,13 +484,13 @@ export default function DashboardCareersPage() {
       </div>
 
       {/* Tabs Switcher */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-3">
+      <div className="flex items-center gap-2 border-b border-gray-200 pb-3">
         <button
           onClick={() => setActiveTab('openings')}
           className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
             activeTab === 'openings'
-              ? 'bg-slate-900 text-white shadow-xs'
-              : 'text-slate-600 hover:bg-slate-100'
+              ? 'bg-[#fef9e8] text-black border border-[#cfb53b]/40 shadow-xs'
+              : 'bg-white text-black hover:bg-gray-100'
           }`}
         >
           Job Postings ({jobs.length})
@@ -496,13 +499,13 @@ export default function DashboardCareersPage() {
           onClick={() => setActiveTab('applications')}
           className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer flex items-center gap-2 ${
             activeTab === 'applications'
-              ? 'bg-slate-900 text-white shadow-xs'
-              : 'text-slate-600 hover:bg-slate-100'
+              ? 'bg-[#fef9e8] text-black border border-[#cfb53b]/40 shadow-xs'
+              : 'bg-white text-black hover:bg-gray-100'
           }`}
         >
           <span>Candidate Applications ({applications.length})</span>
           {pendingAppsCount > 0 && (
-            <span className="px-2 py-0.5 text-[11px] rounded-full bg-[#cfb53b] text-white font-bold">
+            <span className="px-2 py-0.5 text-[11px] rounded-full bg-[#cfb53b] text-black font-bold">
               {pendingAppsCount} new
             </span>
           )}
@@ -521,8 +524,8 @@ export default function DashboardCareersPage() {
                   onClick={() => setJobStatusFilter(status)}
                   className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all cursor-pointer ${
                     jobStatusFilter === status
-                      ? 'bg-[#fef9e8] text-[#b89e2f] border border-[#cfb53b]/40'
-                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                      ? 'bg-[#fef9e8] text-black border border-[#cfb53b]/40'
+                      : 'bg-white text-black border border-gray-200 hover:bg-gray-50'
                   }`}
                 >
                   {status === 'all'
@@ -535,36 +538,36 @@ export default function DashboardCareersPage() {
             </div>
 
             <div className="relative w-full sm:w-80">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-black" />
               <Input
                 value={jobSearch}
                 onChange={(e) => setJobSearch(e.target.value)}
                 placeholder="Search title, department, location..."
-                className="pl-9 bg-white"
+                className={`pl-9 ${inputFieldClass}`}
               />
             </div>
           </div>
 
           {loadingJobs ? (
-            <div className="py-16 text-center text-slate-500 text-sm">
+            <div className="py-16 text-center text-black text-sm">
               Loading job postings...
             </div>
           ) : filteredJobs.length === 0 ? (
-            <Card className="border-dashed border-slate-300">
+            <Card className="bg-white text-black border-dashed border-gray-300">
               <CardContent className="py-14 text-center space-y-3">
-                <Briefcase className="size-10 text-slate-400 mx-auto" />
-                <h3 className="text-lg font-semibold text-slate-800">
+                <Briefcase className="size-10 text-black mx-auto" />
+                <h3 className="text-lg font-semibold text-black">
                   No Job Postings Found
                 </h3>
-                <p className="text-sm text-slate-500 max-w-md mx-auto">
+                <p className="text-sm text-black max-w-md mx-auto">
                   Create a job opening to display it on the public{' '}
                   <span className="font-mono text-xs">/careers</span> page.
                 </p>
                 <Button
                   onClick={handleOpenNewJobModal}
-                  className="bg-[#cfb53b] hover:bg-[#b89e2f] text-white mt-2"
+                  className="bg-[#cfb53b] hover:bg-[#b89e2f] text-black font-bold mt-2"
                 >
-                  <Plus className="size-4 mr-2" />
+                  <Plus className="size-4 mr-2 text-black" />
                   Create First Job Posting
                 </Button>
               </CardContent>
@@ -579,7 +582,7 @@ export default function DashboardCareersPage() {
                 return (
                   <Card
                     key={job.id}
-                    className="border-slate-200/90 hover:border-slate-300 transition-all"
+                    className="bg-white text-black border-gray-200 hover:border-gray-300 transition-all"
                   >
                     <CardContent className="p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                       <div className="space-y-2.5 max-w-3xl">
@@ -588,49 +591,49 @@ export default function DashboardCareersPage() {
                             variant="outline"
                             className={
                               job.isActive
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                : 'bg-slate-100 text-slate-600 border-slate-200'
+                                ? 'bg-emerald-50 text-black border-emerald-200'
+                                : 'bg-gray-100 text-black border-gray-200'
                             }
                           >
                             {job.isActive ? 'Published' : 'Hidden / Closed'}
                           </Badge>
                           <Badge
                             variant="outline"
-                            className="bg-[#fef9e8] text-[#b89e2f] border-[#cfb53b]/30"
+                            className="bg-[#fef9e8] text-black border-[#cfb53b]/40"
                           >
                             {job.department}
                           </Badge>
-                          <span className="inline-flex items-center gap-1 text-xs text-slate-500">
-                            <MapPin className="size-3.5" />
+                          <span className="inline-flex items-center gap-1 text-xs text-black">
+                            <MapPin className="size-3.5 text-black" />
                             {job.location}
                           </span>
-                          <span className="inline-flex items-center gap-1 text-xs text-slate-500">
-                            <Clock className="size-3.5" />
+                          <span className="inline-flex items-center gap-1 text-xs text-black">
+                            <Clock className="size-3.5 text-black" />
                             {job.type}
                           </span>
                           {job.salaryRange && (
-                            <span className="inline-flex items-center gap-1 text-xs text-slate-500">
-                              <DollarSign className="size-3.5" />
+                            <span className="inline-flex items-center gap-1 text-xs text-black">
+                              <DollarSign className="size-3.5 text-black" />
                               {job.salaryRange}
                             </span>
                           )}
                           {job.closingDate && (
-                            <span className="inline-flex items-center gap-1 text-xs text-slate-500">
-                              <Calendar className="size-3.5" />
+                            <span className="inline-flex items-center gap-1 text-xs text-black">
+                              <Calendar className="size-3.5 text-black" />
                               Closes: {job.closingDate}
                             </span>
                           )}
                         </div>
 
-                        <h3 className="text-xl font-bold text-slate-900">
+                        <h3 className="text-xl font-bold text-black">
                           {job.title}
                         </h3>
 
-                        <p className="text-sm text-slate-600 line-clamp-2">
+                        <p className="text-sm text-black line-clamp-2">
                           {job.summary || job.description}
                         </p>
 
-                        <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-slate-500">
+                        <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-black">
                           <span>
                             <strong>{job.responsibilities?.length || 0}</strong>{' '}
                             Responsibilities
@@ -651,16 +654,16 @@ export default function DashboardCareersPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleToggleJobActive(job)}
-                          className="gap-1.5"
+                          className="gap-1.5 bg-white text-black border-gray-300 hover:bg-gray-100"
                         >
                           {job.isActive ? (
                             <>
-                              <EyeOff className="size-4 text-slate-500" />
+                              <EyeOff className="size-4 text-black" />
                               <span>Hide</span>
                             </>
                           ) : (
                             <>
-                              <Eye className="size-4 text-emerald-600" />
+                              <Eye className="size-4 text-black" />
                               <span>Publish</span>
                             </>
                           )}
@@ -670,9 +673,9 @@ export default function DashboardCareersPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleOpenEditJobModal(job)}
-                          className="gap-1.5"
+                          className="gap-1.5 bg-white text-black border-gray-300 hover:bg-gray-100"
                         >
-                          <Edit2 className="size-4" />
+                          <Edit2 className="size-4 text-black" />
                           <span>Edit</span>
                         </Button>
 
@@ -680,9 +683,9 @@ export default function DashboardCareersPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleDeleteJob(job)}
-                          className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 gap-1.5"
+                          className="bg-white text-black border-gray-300 hover:bg-rose-50 gap-1.5"
                         >
-                          <Trash2 className="size-4" />
+                          <Trash2 className="size-4 text-black" />
                           <span>Delete</span>
                         </Button>
                       </div>
@@ -704,8 +707,8 @@ export default function DashboardCareersPage() {
                 onClick={() => setAppStatusFilter('all')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   appStatusFilter === 'all'
-                    ? 'bg-slate-900 text-white'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                    ? 'bg-[#fef9e8] text-black border border-[#cfb53b]/40'
+                    : 'bg-white text-black border border-gray-200 hover:bg-gray-50'
                 }`}
               >
                 All ({applications.length})
@@ -716,8 +719,8 @@ export default function DashboardCareersPage() {
                   onClick={() => setAppStatusFilter(st.value)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                     appStatusFilter === st.value
-                      ? 'bg-slate-900 text-white'
-                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                      ? 'bg-[#fef9e8] text-black border border-[#cfb53b]/40'
+                      : 'bg-white text-black border border-gray-200 hover:bg-gray-50'
                   }`}
                 >
                   {st.label}
@@ -729,40 +732,42 @@ export default function DashboardCareersPage() {
               <select
                 value={appRoleFilter}
                 onChange={(e) => setAppRoleFilter(e.target.value)}
-                className="h-9 rounded-md border border-slate-200 bg-white px-3 text-xs text-slate-700 outline-none"
+                className="h-9 rounded-md border border-gray-300 bg-white px-3 text-xs text-black outline-none"
               >
-                <option value="all">All Roles</option>
+                <option value="all" className="bg-white text-black">
+                  All Roles
+                </option>
                 {applicationRoles.map((role) => (
-                  <option key={role} value={role}>
+                  <option key={role} value={role} className="bg-white text-black">
                     {role}
                   </option>
                 ))}
               </select>
 
               <div className="relative w-full sm:w-72">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-slate-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-black" />
                 <Input
                   value={appSearch}
                   onChange={(e) => setAppSearch(e.target.value)}
                   placeholder="Search applicant name, email, role..."
-                  className="pl-9 bg-white"
+                  className={`pl-9 ${inputFieldClass}`}
                 />
               </div>
             </div>
           </div>
 
           {loadingApplications ? (
-            <div className="py-16 text-center text-slate-500 text-sm">
+            <div className="py-16 text-center text-black text-sm">
               Loading candidate applications...
             </div>
           ) : filteredApplications.length === 0 ? (
-            <Card className="border-dashed border-slate-300">
+            <Card className="bg-white text-black border-dashed border-gray-300">
               <CardContent className="py-14 text-center space-y-2">
-                <Users className="size-10 text-slate-400 mx-auto" />
-                <h3 className="text-lg font-semibold text-slate-800">
+                <Users className="size-10 text-black mx-auto" />
+                <h3 className="text-lg font-semibold text-black">
                   No Applications Found
                 </h3>
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-black">
                   Candidate applications submitted on the Careers page will
                   appear here.
                 </p>
@@ -776,12 +781,15 @@ export default function DashboardCareersPage() {
                   APPLICATION_STATUSES[0];
 
                 return (
-                  <Card key={app.id} className="border-slate-200/90">
+                  <Card
+                    key={app.id}
+                    className="bg-white text-black border-gray-200"
+                  >
                     <CardContent className="p-6 space-y-4">
                       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                         <div className="space-y-1">
                           <div className="flex flex-wrap items-center gap-2">
-                            <h3 className="text-lg font-bold text-slate-900">
+                            <h3 className="text-lg font-bold text-black">
                               {app.applicantName}
                             </h3>
                             <Badge
@@ -792,35 +800,35 @@ export default function DashboardCareersPage() {
                             </Badge>
                             <Badge
                               variant="outline"
-                              className="bg-slate-50 text-slate-700 border-slate-200"
+                              className="bg-white text-black border-gray-300"
                             >
                               {app.jobTitle}
                             </Badge>
                           </div>
 
-                          <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 pt-1">
+                          <div className="flex flex-wrap items-center gap-4 text-xs text-black pt-1">
                             <a
                               href={`mailto:${app.email}`}
-                              className="inline-flex items-center gap-1 hover:text-slate-900 underline"
+                              className="inline-flex items-center gap-1 text-black hover:underline"
                             >
-                              <Mail className="size-3.5" />
+                              <Mail className="size-3.5 text-black" />
                               {app.email}
                             </a>
                             <a
                               href={`tel:${app.phone}`}
-                              className="inline-flex items-center gap-1 hover:text-slate-900"
+                              className="inline-flex items-center gap-1 text-black"
                             >
-                              <Phone className="size-3.5" />
+                              <Phone className="size-3.5 text-black" />
                               {app.phone}
                             </a>
                             {app.yearsOfExperience && (
-                              <span>
+                              <span className="text-black">
                                 Experience:{' '}
                                 <strong>{app.yearsOfExperience}</strong>
                               </span>
                             )}
                             {app.createdAt && (
-                              <span>
+                              <span className="text-black">
                                 Applied:{' '}
                                 {new Date(app.createdAt).toLocaleDateString()}
                               </span>
@@ -840,10 +848,14 @@ export default function DashboardCareersPage() {
                                 e.target.value as ApplicationStatus
                               )
                             }
-                            className="h-9 rounded-md border border-slate-200 bg-white px-3 text-xs font-medium text-slate-700 outline-none"
+                            className="h-9 rounded-md border border-gray-300 bg-white px-3 text-xs font-medium text-black outline-none"
                           >
                             {APPLICATION_STATUSES.map((st) => (
-                              <option key={st.value} value={st.value}>
+                              <option
+                                key={st.value}
+                                value={st.value}
+                                className="bg-white text-black"
+                              >
                                 {st.label}
                               </option>
                             ))}
@@ -855,16 +867,16 @@ export default function DashboardCareersPage() {
                             onClick={() =>
                               app.id && handleDeleteApplication(app.id)
                             }
-                            className="text-rose-600 hover:text-rose-700 hover:bg-rose-50"
+                            className="bg-white text-black border-gray-300 hover:bg-rose-50"
                           >
-                            <Trash2 className="size-4" />
+                            <Trash2 className="size-4 text-black" />
                           </Button>
                         </div>
                       </div>
 
                       {app.coverLetter && (
-                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 text-sm text-slate-700 whitespace-pre-line">
-                          <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">
+                        <div className="bg-white rounded-xl p-4 border border-gray-200 text-sm text-black whitespace-pre-line">
+                          <p className="text-[11px] font-semibold uppercase tracking-wider text-black mb-1">
                             Cover Note / Pitch
                           </p>
                           {app.coverLetter}
@@ -877,11 +889,11 @@ export default function DashboardCareersPage() {
                             href={app.resumeUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#b89e2f] bg-[#fef9e8] border border-[#cfb53b]/30 px-3.5 py-2 rounded-lg hover:bg-[#fcf3d1]"
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-black bg-[#fef9e8] border border-[#cfb53b]/40 px-3.5 py-2 rounded-lg hover:bg-[#fcf3d1]"
                           >
-                            <FileText className="size-3.5" />
+                            <FileText className="size-3.5 text-black" />
                             <span>View Resume / CV</span>
-                            <ExternalLink className="size-3" />
+                            <ExternalLink className="size-3 text-black" />
                           </a>
                         )}
                         {app.linkedInUrl && (
@@ -889,10 +901,10 @@ export default function DashboardCareersPage() {
                             href={app.linkedInUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 bg-slate-100 px-3.5 py-2 rounded-lg hover:bg-slate-200"
+                            className="inline-flex items-center gap-1.5 text-xs font-medium text-black bg-white border border-gray-300 px-3.5 py-2 rounded-lg hover:bg-gray-100"
                           >
                             <span>LinkedIn Profile</span>
-                            <ExternalLink className="size-3" />
+                            <ExternalLink className="size-3 text-black" />
                           </a>
                         )}
                         {app.portfolioUrl && (
@@ -900,10 +912,10 @@ export default function DashboardCareersPage() {
                             href={app.portfolioUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 bg-slate-100 px-3.5 py-2 rounded-lg hover:bg-slate-200"
+                            className="inline-flex items-center gap-1.5 text-xs font-medium text-black bg-white border border-gray-300 px-3.5 py-2 rounded-lg hover:bg-gray-100"
                           >
                             <span>Portfolio / Website</span>
-                            <ExternalLink className="size-3" />
+                            <ExternalLink className="size-3 text-black" />
                           </a>
                         )}
                       </div>
@@ -919,22 +931,22 @@ export default function DashboardCareersPage() {
       {/* CREATE / EDIT JOB MODAL */}
       {showJobModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 overflow-y-auto">
-          <Card className="w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white shadow-2xl my-8">
-            <CardHeader className="flex flex-row items-center justify-between border-b pb-4">
+          <Card className="w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white text-black border-gray-200 shadow-2xl my-8">
+            <CardHeader className="flex flex-row items-center justify-between border-b border-gray-200 pb-4">
               <div>
-                <CardTitle className="text-xl font-bold">
+                <CardTitle className="text-xl font-bold text-black">
                   {editingJobId ? 'Edit Job Posting' : 'Create New Job Posting'}
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-black">
                   Configure role details to display on the public Wephco Careers
                   page.
                 </CardDescription>
               </div>
               <button
                 onClick={() => setShowJobModal(false)}
-                className="p-2 rounded-full hover:bg-slate-100 text-slate-500 cursor-pointer"
+                className="p-2 rounded-full hover:bg-gray-100 text-black cursor-pointer"
               >
-                <X className="size-5" />
+                <X className="size-5 text-black" />
               </button>
             </CardHeader>
 
@@ -942,7 +954,9 @@ export default function DashboardCareersPage() {
               <form onSubmit={handleSaveJob} className="space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5 sm:col-span-2">
-                    <Label>Job Title *</Label>
+                    <Label className="text-black font-semibold">
+                      Job Title *
+                    </Label>
                     <Input
                       required
                       value={jobForm.title}
@@ -950,11 +964,14 @@ export default function DashboardCareersPage() {
                         setJobForm({ ...jobForm, title: e.target.value })
                       }
                       placeholder="e.g. Senior Luxury Property Advisor"
+                      className={inputFieldClass}
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label>Department *</Label>
+                    <Label className="text-black font-semibold">
+                      Department *
+                    </Label>
                     <Input
                       required
                       value={jobForm.department}
@@ -962,11 +979,14 @@ export default function DashboardCareersPage() {
                         setJobForm({ ...jobForm, department: e.target.value })
                       }
                       placeholder="e.g. Brokerage & Advisory"
+                      className={inputFieldClass}
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label>Location *</Label>
+                    <Label className="text-black font-semibold">
+                      Location *
+                    </Label>
                     <Input
                       required
                       value={jobForm.location}
@@ -974,11 +994,14 @@ export default function DashboardCareersPage() {
                         setJobForm({ ...jobForm, location: e.target.value })
                       }
                       placeholder="e.g. Abuja, Nigeria / Dubai, UAE"
+                      className={inputFieldClass}
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label>Employment Type</Label>
+                    <Label className="text-black font-semibold">
+                      Employment Type
+                    </Label>
                     <select
                       value={jobForm.type}
                       onChange={(e) =>
@@ -987,10 +1010,14 @@ export default function DashboardCareersPage() {
                           type: e.target.value as EmploymentType,
                         })
                       }
-                      className="w-full h-9 rounded-md border border-input bg-transparent px-3 text-sm"
+                      className="w-full h-9 rounded-md border border-gray-300 bg-white text-black px-3 text-sm"
                     >
                       {EMPLOYMENT_TYPES.map((type) => (
-                        <option key={type} value={type}>
+                        <option
+                          key={type}
+                          value={type}
+                          className="bg-white text-black"
+                        >
                           {type}
                         </option>
                       ))}
@@ -998,7 +1025,9 @@ export default function DashboardCareersPage() {
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label>Experience Level</Label>
+                    <Label className="text-black font-semibold">
+                      Experience Level
+                    </Label>
                     <Input
                       value={jobForm.experienceLevel}
                       onChange={(e) =>
@@ -1008,34 +1037,43 @@ export default function DashboardCareersPage() {
                         })
                       }
                       placeholder="e.g. Senior (5+ Years)"
+                      className={inputFieldClass}
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label>Salary / Compensation Range</Label>
+                    <Label className="text-black font-semibold">
+                      Salary / Compensation Range
+                    </Label>
                     <Input
                       value={jobForm.salaryRange}
                       onChange={(e) =>
                         setJobForm({ ...jobForm, salaryRange: e.target.value })
                       }
                       placeholder="e.g. Competitive Base + Commission"
+                      className={inputFieldClass}
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <Label>Application Closing Date</Label>
+                    <Label className="text-black font-semibold">
+                      Application Closing Date
+                    </Label>
                     <Input
                       type="date"
                       value={jobForm.closingDate}
                       onChange={(e) =>
                         setJobForm({ ...jobForm, closingDate: e.target.value })
                       }
+                      className={inputFieldClass}
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label>Short Summary (Displayed on Job Card) *</Label>
+                  <Label className="text-black font-semibold">
+                    Short Summary (Displayed on Job Card) *
+                  </Label>
                   <Textarea
                     required
                     rows={2}
@@ -1044,11 +1082,14 @@ export default function DashboardCareersPage() {
                       setJobForm({ ...jobForm, summary: e.target.value })
                     }
                     placeholder="Brief 1-2 sentence overview of the opportunity..."
+                    className={inputFieldClass}
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label>Full Role Description</Label>
+                  <Label className="text-black font-semibold">
+                    Full Role Description
+                  </Label>
                   <Textarea
                     rows={4}
                     value={jobForm.description}
@@ -1056,11 +1097,14 @@ export default function DashboardCareersPage() {
                       setJobForm({ ...jobForm, description: e.target.value })
                     }
                     placeholder="Detailed overview of the role, team, and mission..."
+                    className={inputFieldClass}
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label>Key Responsibilities (One per line)</Label>
+                  <Label className="text-black font-semibold">
+                    Key Responsibilities (One per line)
+                  </Label>
                   <Textarea
                     rows={4}
                     value={responsibilitiesText}
@@ -1068,11 +1112,14 @@ export default function DashboardCareersPage() {
                     placeholder={
                       'Advise UHNW clients on cross-border property acquisitions\nManage end-to-end deal negotiations and closing'
                     }
+                    className={inputFieldClass}
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label>Requirements & Qualifications (One per line)</Label>
+                  <Label className="text-black font-semibold">
+                    Requirements &amp; Qualifications (One per line)
+                  </Label>
                   <Textarea
                     rows={4}
                     value={requirementsText}
@@ -1080,11 +1127,14 @@ export default function DashboardCareersPage() {
                     placeholder={
                       'Minimum 5 years experience in luxury real estate or private wealth\nProven network of high-net-worth investors'
                     }
+                    className={inputFieldClass}
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label>Benefits & Perks (One per line)</Label>
+                  <Label className="text-black font-semibold">
+                    Benefits &amp; Perks (One per line)
+                  </Label>
                   <Textarea
                     rows={3}
                     value={benefitsText}
@@ -1092,6 +1142,7 @@ export default function DashboardCareersPage() {
                     placeholder={
                       'Uncapped commission structure\nInternational roadshow travel opportunities'
                     }
+                    className={inputFieldClass}
                   />
                 </div>
 
@@ -1105,23 +1156,27 @@ export default function DashboardCareersPage() {
                     }
                     className="size-4 accent-[#cfb53b] rounded"
                   />
-                  <Label htmlFor="isActiveJob" className="cursor-pointer">
+                  <Label
+                    htmlFor="isActiveJob"
+                    className="cursor-pointer text-black font-medium"
+                  >
                     Publish immediately on the public Careers page
                   </Label>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4 border-t">
+                <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => setShowJobModal(false)}
+                    className="bg-white text-black border-gray-300 hover:bg-gray-100"
                   >
                     Cancel
                   </Button>
                   <Button
                     type="submit"
                     disabled={savingJob}
-                    className="bg-[#cfb53b] hover:bg-[#b89e2f] text-white"
+                    className="bg-[#cfb53b] hover:bg-[#b89e2f] text-black font-bold"
                   >
                     {savingJob
                       ? 'Saving...'
@@ -1138,4 +1193,3 @@ export default function DashboardCareersPage() {
     </div>
   );
 }
-
