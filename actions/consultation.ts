@@ -21,10 +21,16 @@ export const updateConsultation = async (id: string, data: Partial<IConsultation
 export const getConsultations = async (): Promise<IConsultation[]> => {
     try {
         const docs = await getAllDocuments(COLLECTION_NAME);
-        return docs.map(doc => ({
+        const consultations = docs.map(doc => ({
             id: doc.id,
             ...serializeDoc(doc)
         })) as unknown as IConsultation[];
+
+        return consultations.sort((a, b) => {
+            const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+            const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+            return dateB - dateA;
+        });
     } catch (error) {
         console.error("Error fetching consultations:", error);
         throw new Error("Failed to fetch consultations");

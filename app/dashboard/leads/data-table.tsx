@@ -67,7 +67,7 @@ export function DataTable<TData, TValue>({
   });
 
   // Custom date range filter applied on the client
-  const filteredRows = table.getRowModel().rows.filter((row) => {
+  const filterByDateRange = (row: any) => {
     const createdAt = (row.original as any).createdAt;
     if (!createdAt) return true;
     const date = new Date(createdAt);
@@ -78,7 +78,13 @@ export function DataTable<TData, TValue>({
       if (date > toEnd) return false;
     }
     return true;
-  });
+  };
+
+  const filteredRows = table.getRowModel().rows.filter(filterByDateRange);
+  const totalRows = table.getFilteredRowModel().rows.filter(filterByDateRange).length;
+  const { pageIndex, pageSize } = table.getState().pagination;
+  const startRow = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
+  const endRow = Math.min((pageIndex + 1) * pageSize, totalRows);
 
   return (
     <div>
@@ -210,8 +216,9 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-between py-4">
-        <p className="text-sm text-muted-foreground">
-          Showing {filteredRows.length} of {data.length} leads
+        <p className="text-sm text-slate-500">
+          Showing {totalRows === 0 ? 0 : `${startRow}-${endRow}`} of {totalRows}{' '}
+          leads
         </p>
         <div className="flex items-center space-x-2">
           <Button

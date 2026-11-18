@@ -58,6 +58,11 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const totalRows = table.getFilteredRowModel().rows.length;
+  const { pageIndex, pageSize } = table.getState().pagination;
+  const startRow = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
+  const endRow = Math.min((pageIndex + 1) * pageSize, totalRows);
+
   return (
     <div>
       <div className="flex items-center gap-4 py-4 flex-wrap">
@@ -152,21 +157,27 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}>
-          Previous
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}>
-          Next
-        </Button>
+      <div className="flex items-center justify-between py-4">
+        <p className="text-sm text-slate-500">
+          Showing {totalRows === 0 ? 0 : `${startRow}-${endRow}`} of {totalRows}{' '}
+          properties
+        </p>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}>
+            Previous
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}>
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -67,6 +67,11 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const totalRows = table.getFilteredRowModel().rows.length;
+  const { pageIndex, pageSize } = table.getState().pagination;
+  const startRow = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
+  const endRow = Math.min((pageIndex + 1) * pageSize, totalRows);
+
   return (
     <div>
       <div className="flex items-center gap-4 py-4 flex-wrap">
@@ -165,8 +170,9 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-between py-4">
-        <p className="text-sm text-muted-foreground">
-          {table.getFilteredRowModel().rows.length} records
+        <p className="text-sm text-slate-500">
+          Showing {totalRows === 0 ? 0 : `${startRow}-${endRow}`} of {totalRows}{' '}
+          records
         </p>
         <div className="flex items-center space-x-2">
           <Button
