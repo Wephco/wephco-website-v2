@@ -72,7 +72,7 @@ export function DataTable<TData, TValue>({
           onChange={(event) =>
             table.getColumn('name')?.setFilterValue(event.target.value)
           }
-          className="max-w-[250px] bg-white border-gray-200"
+          className="max-w-62.5 bg-white border-gray-200"
         />
         <Select
           value={
@@ -83,7 +83,7 @@ export function DataTable<TData, TValue>({
               .getColumn('service')
               ?.setFilterValue(value === 'all' ? undefined : value)
           }>
-          <SelectTrigger className="w-[200px] bg-white border-gray-200">
+          <SelectTrigger className="w-50 bg-white border-gray-200">
             <SelectValue placeholder="Filter by service" />
           </SelectTrigger>
           <SelectContent>

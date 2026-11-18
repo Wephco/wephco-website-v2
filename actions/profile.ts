@@ -2,11 +2,10 @@
 
 import { auth, db, storage } from '@/firebase/firebaseConfig';
 import { IAdminUser, Role } from '@/interfaces/userInterface';
-// import { checkAuthenticationCode } from '@/lib/helperFunctions';
+import crypto from 'crypto';
 
 export async function updateUserRole(userId: string, newRole: Role) {
   try {
-    
     await db.collection('users').doc(userId).update({
       role: newRole,
       updatedAt: new Date().toISOString(),
@@ -15,61 +14,99 @@ export async function updateUserRole(userId: string, newRole: Role) {
     return { success: true };
   } catch (error: any) {
     console.error('Failed to update user role:', error);
-    return { success: false, message: error.message || 'Failed to update user role' };
+    return {
+      success: false,
+      message: error.message || 'Failed to update user role',
+    };
   }
 }
 
 export async function updateUserProfile(userId: string, formData: FormData) {
   try {
-    const name = formData.get('name') as string;
-    const email = formData.get('email') as string;
+    if (!userId) {
+      throw new Error('User ID is required to update profile.');
+    }
+
+    const name = ((formData.get('name') as string) || '').trim();
+    const email = ((formData.get('email') as string) || '').trim();
     const avatarFile = formData.get('avatar') as File | null;
-    const existingPhotoURL = formData.get('existingPhotoURL') as string || '';
+    const existingPhotoURL =
+      (formData.get('existingPhotoURL') as string) || '';
+    const uploadedAvatarUrl =
+      (formData.get('uploadedAvatarUrl') as string) || '';
 
-    let photoURL = existingPhotoURL;
+    let photoURL = uploadedAvatarUrl || existingPhotoURL;
 
-    // Handle avatar upload if provided
-    if (avatarFile && avatarFile.size > 0) {
-      const bucket = storage.bucket(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
-      const fileName = `avatars/${userId}_${Date.now()}_${avatarFile.name}`;
+    // Handle avatar upload if a file was passed directly in FormData
+    if (!uploadedAvatarUrl && avatarFile && avatarFile.size > 0) {
+      const bucketName = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
+      if (!bucketName) {
+        throw new Error('Firebase Storage bucket is not configured.');
+      }
+
+      const bucket = storage.bucket(bucketName);
+      const sanitizedName = avatarFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const fileName = `avatars/${userId}_${Date.now()}_${sanitizedName}`;
       const file = bucket.file(fileName);
-      
+
       const buffer = Buffer.from(await avatarFile.arrayBuffer());
-      
+      const downloadToken = crypto.randomUUID();
+
       await file.save(buffer, {
-        contentType: avatarFile.type,
-        metadata: { firebaseStorageDownloadTokens: Date.now().toString() },
+        resumable: false,
+        contentType: avatarFile.type || 'image/jpeg',
+        metadata: {
+          metadata: {
+            firebaseStorageDownloadTokens: downloadToken,
+          },
+        },
       });
-      
-      await file.makePublic();
-      photoURL = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+
+      photoURL = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(
+        fileName
+      )}?alt=media&token=${downloadToken}`;
     }
 
     // Prepare update data for Firebase Auth
-    const authUpdateData: any = {};
+    const authUpdateData: Record<string, any> = {};
     if (name) authUpdateData.displayName = name;
     if (email) authUpdateData.email = email;
     if (photoURL) authUpdateData.photoURL = photoURL;
 
-    // Update Firebase Auth user
     if (Object.keys(authUpdateData).length > 0) {
       await auth.updateUser(userId, authUpdateData);
     }
 
+    const nameParts = name ? name.split(/\s+/) : [];
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+
     // Update Firestore User Document
     const firestoreUpdateData: Partial<IAdminUser> = {
-      firstName: name.split(' ')[0],
-      lastName: name.split(' ')[1],
+      firstName,
+      lastName,
       email,
       photoURL,
       updatedAt: new Date().toISOString(),
     };
 
-    await db.collection('users').doc(userId).update(firestoreUpdateData);
+    await db
+      .collection('users')
+      .doc(userId)
+      .set(firestoreUpdateData, { merge: true });
 
-    return { success: true, photoURL };
+    return {
+      success: true,
+      photoURL,
+      firstName,
+      lastName,
+      email,
+    };
   } catch (error: any) {
     console.error('Failed to update user profile:', error);
-    return { success: false, message: error.message || 'Failed to update user profile' };
+    return {
+      success: false,
+      message: error.message || 'Failed to update user profile',
+    };
   }
 }

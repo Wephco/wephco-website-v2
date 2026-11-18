@@ -109,10 +109,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // Wait for the doc to return the role for the AuthForm redirection
         const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
         const userRole = userDoc.exists() ? userDoc.data().role : null;
+        const userDataWithId = {
+            id: userCredential.user.uid,
+            ...(userDoc.exists() ? userDoc.data() : {}),
+        } as IAdminUser;
 
-        setCurrentUser(userDoc.data() as IAdminUser);
+        setCurrentUser(userDataWithId);
 
-        sessionStorage.setItem('user', JSON.stringify(userDoc.data()));
+        sessionStorage.setItem('user', JSON.stringify(userDataWithId));
         
         return { role: userRole, uid: userCredential.user.uid };
 	};

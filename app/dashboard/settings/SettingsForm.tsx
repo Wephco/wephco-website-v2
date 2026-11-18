@@ -71,15 +71,18 @@ const SettingsForm = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (currentUser) {
-      setName(`${currentUser.firstName} ${currentUser.lastName}`);
-      setEmail(currentUser.email || '');
-      setAvatarPreview(currentUser.photoURL || null);
-      if (currentUser.role) {
+    if (currentUser || authUser) {
+      const firstName = currentUser?.firstName ?? '';
+      const lastName = currentUser?.lastName ?? '';
+      const fullName = `${firstName} ${lastName}`.trim();
+      setName(fullName);
+      setEmail(currentUser?.email || authUser?.email || '');
+      setAvatarPreview(currentUser?.photoURL || authUser?.photoURL || null);
+      if (currentUser?.role) {
         setSelectedRole(currentUser.role as Role);
       }
     }
-  }, [currentUser]);
+  }, [currentUser, authUser]);
 
   const [adminSettings, setAdminSettings] = useState({
     maintenanceMode: initialGlobalSettings?.maintenanceMode || false,
@@ -90,28 +93,56 @@ const SettingsForm = ({
 
   const handleProfileUpdate = async (e: React.SubmitEvent) => {
     e.preventDefault();
-    if (!currentUser?.id) return;
+    const userId = currentUser?.id || authUser?.id;
+    if (!userId) {
+      toast.error('Unable to identify current user session. Please log in again.');
+      return;
+    }
 
     setIsSaving(true);
 
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('email', email);
-    if (avatarFile) {
-      formData.append('avatar', avatarFile);
-    }
-    formData.append('existingPhotoURL', currentUser.photoURL || '');
+    try {
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('email', email);
+      if (avatarFile) {
+        formData.append('avatar', avatarFile);
+      }
+      formData.append(
+        'existingPhotoURL',
+        currentUser?.photoURL || authUser?.photoURL || ''
+      );
 
-    const res = await updateUserProfile(currentUser.id, formData);
-    setIsSaving(false);
+      const res = await updateUserProfile(userId, formData);
 
-    if (res.success) {
-      toast.success('Profile updated successfully');
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-    } else {
-      toast.error(res.message || 'Failed to update profile');
+      if (res.success) {
+        // Sync updated profile (including new photoURL) into sessionStorage so useSessionUser reflects it on reload
+        const updatedSessionUser = {
+          ...(currentUser || {}),
+          id: userId,
+          firstName: res.firstName ?? currentUser?.firstName ?? '',
+          lastName: res.lastName ?? currentUser?.lastName ?? '',
+          email: res.email ?? email,
+          photoURL: res.photoURL ?? avatarPreview,
+        };
+        sessionStorage.setItem('user', JSON.stringify(updatedSessionUser));
+
+        if (res.photoURL) {
+          setAvatarPreview(res.photoURL);
+        }
+        setAvatarFile(null);
+
+        toast.success('Profile updated successfully');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        toast.error(res.message || 'Failed to update profile');
+      }
+    } catch (err: any) {
+      toast.error(err?.message || 'An error occurred while updating profile');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -158,6 +189,7 @@ const SettingsForm = ({
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
         toast.error('Image size should be less than 5MB');
+        e.target.value = '';
         return;
       }
       setAvatarFile(file);

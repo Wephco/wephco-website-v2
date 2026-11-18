@@ -74,7 +74,7 @@ export function DataTable<TData, TValue>({
               .getColumn('status')
               ?.setFilterValue(value === 'all' ? '' : value)
           }>
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-45">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
           <SelectContent>
